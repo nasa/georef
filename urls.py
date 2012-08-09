@@ -43,6 +43,12 @@ if settings.USE_STATIC_SERVE:
                  show_indexes=True,
                  readOnly=True)),
         
+        url(r'^data/(?P<path>.*)$',
+            'geocamUtil.views.staticServeWithExpires.staticServeWithExpires',
+            dict(document_root=settings.DATA_ROOT,
+                 show_indexes=True,
+                 readOnly=True)),
+
         url(r'^favicon.ico$', 'django.views.generic.simple.redirect_to',
             {'url': settings.STATIC_URL + 'responderMaps/icons/responderMaps.ico',
              'readOnly': True}),
