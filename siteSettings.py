@@ -29,7 +29,8 @@ USING_DJANGO_DEV_SERVER = ('runserver' in sys.argv)
 if USING_DJANGO_DEV_SERVER:
     # django dev server deployment won't work with other SCRIPT_NAME settings
     SCRIPT_NAME = '/'
-    USE_STATIC_SERVE = True
+
+USE_STATIC_SERVE = USING_DJANGO_DEV_SERVER
 
 # Python path is agnostic to what the site-level dir is. It also prefers the
 # checked-out version of an app over the standard python install locations.
@@ -133,7 +134,15 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 )
 
-GEOCAM_UTIL_SECURITY_ENABLED = not USING_DJANGO_DEV_SERVER
+GEOCAM_UTIL_SECURITY_ENABLED = False  # not USING_DJANGO_DEV_SERVER
 GEOCAM_UTIL_SECURITY_SSL_REQUIRED_BY_DEFAULT = False
 GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS = False
 GEOCAM_UTIL_SECURITY_LOGIN_REQUIRED_BY_DEFAULT = 'write'
+
+LOGIN_URL = SCRIPT_NAME + 'accounts/login/'
+LOGOUT_URL = SCRIPT_NAME + 'accounts/logout/'
+LOGIN_DEFAULT_NEXT_URL = SCRIPT_NAME + 'home/'
+
+SITE_TITLE = 'MapFasten'
+
+GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True

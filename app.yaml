@@ -22,6 +22,9 @@ libraries:
 - name: PIL
   version: "latest"
 
+- name: numpy
+  version: "latest"
+
 handlers:
 
 - url: /static
