@@ -1,0 +1,15 @@
+*.pyc
+media/ugc
+docs/_build/
+src/
+pip-log.txt
+media/js/*.r*.js
+media/css/*.r*.css
+*DS_Store
+*.egg-info
+*~
+/sourceme.sh
+/dev.db
+/settings.py
+/sourcme.sh
+/build/

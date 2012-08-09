@@ -1,0 +1,11 @@
+# This file specifies command-line flags that ./manage.py lint should
+# pass to the pep8 style checker.
+
+# don't complain about overly long lines
+--ignore=E501
+
+# give a verbose message explaining the violated style guideline
+--show-pep8
+
+# go ahead and display the same error multiple times
+--repeat
