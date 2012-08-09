@@ -1,0 +1,36 @@
+# __BEGIN_LICENSE__
+# Copyright (C) 2008-2010 United States Government as represented by
+# the Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+# __END_LICENSE__
+
+# Configuration file when hosting geocamResponderMaps on Google App Engine.
+
+# Replace application name with your application.
+application: mapfasten
+
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: no
+
+libraries:
+
+- name: django
+  version: "1.3"
+
+- name: PIL
+  version: "latest"
+
+handlers:
+
+- url: /static
+  static_dir: build/static
+
+- url: /.*
+  script: submodules/geocamAppEngineLibs/main.py
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'geocamMapFasten.settings'
+  DJANGO_SCRIPT_NAME: '/'
+  SERVER_ENV: 'Google App Engine'
