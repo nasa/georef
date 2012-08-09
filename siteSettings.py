@@ -124,8 +124,7 @@ TEMPLATE_DIRS = (
 # templates.  We suggest putting your apps above standard apps
 # so your apps can override templates as needed.
 INSTALLED_APPS = (
-    # Put your installed apps here!
-    # 'geocamAwesome'
+    'geocamTiePoint',
 
     'geocamUtil',
 
