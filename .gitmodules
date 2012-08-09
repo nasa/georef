@@ -1,0 +1,3 @@
+[submodule "submodules/geocamAppEngineLibs"]
+	path = submodules/geocamAppEngineLibs
+	url = git://github.com/geocam/geocamAppEngineLibs.git
