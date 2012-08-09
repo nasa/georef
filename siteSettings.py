@@ -29,6 +29,7 @@ USING_DJANGO_DEV_SERVER = ('runserver' in sys.argv)
 if USING_DJANGO_DEV_SERVER:
     # django dev server deployment won't work with other SCRIPT_NAME settings
     SCRIPT_NAME = '/'
+    USE_STATIC_SERVE = True
 
 # Python path is agnostic to what the site-level dir is. It also prefers the
 # checked-out version of an app over the standard python install locations.
@@ -97,11 +98,8 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 SECRET_KEY = '9o0a50i$_9rw5l8-==!lhm$%j)--+(pwbn52yglj1)ndjd)du#'
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
-)
+#TEMPLATE_LOADERS = global_settings.TEMPLATE_LOADERS + (
+#)
 
 MIDDLEWARE_CLASSES = (
     'geocamUtil.middleware.LogErrorsMiddleware',
