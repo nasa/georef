@@ -50,6 +50,6 @@ if settings.USE_STATIC_SERVE:
                  readOnly=True)),
 
         url(r'^favicon.ico$', 'django.views.generic.simple.redirect_to',
-            {'url': settings.STATIC_URL + 'responderMaps/icons/responderMaps.ico',
+            {'url': settings.STATIC_URL + 'mapFasten/icons/mapFastenFavicon.ico',
              'readOnly': True}),
         )

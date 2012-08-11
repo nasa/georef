@@ -105,7 +105,9 @@ SECRET_KEY = '9o0a50i$_9rw5l8-==!lhm$%j)--+(pwbn52yglj1)ndjd)du#'
 MIDDLEWARE_CLASSES = (
     'geocamUtil.middleware.LogErrorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'geocamUtil.middleware.SecurityMiddleware',
@@ -123,9 +125,12 @@ TEMPLATE_DIRS = (
 # templates.  We suggest putting your apps above standard apps
 # so your apps can override templates as needed.
 INSTALLED_APPS = (
+    'mapFastenApp',
     'geocamTiePoint',
 
     'geocamUtil',
+
+    'django_digest',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -146,3 +151,10 @@ LOGIN_DEFAULT_NEXT_URL = SCRIPT_NAME + 'home/'
 SITE_TITLE = 'MapFasten'
 
 GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True
+
+# override this in settings for production use
+CACHES = CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
