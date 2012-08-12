@@ -41,14 +41,6 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-# Databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'dev.db'
-    }
-}
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -150,9 +142,42 @@ SITE_TITLE = 'MapFasten'
 
 GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True
 
-# override this in settings.py for production use
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+USING_APP_ENGINE = (os.getenv('SERVER_ENV', '').startswith('Google App Engine')
+                    or os.getenv('SETTINGS_MODE') == 'appengine')
+
+if USING_APP_ENGINE:
+    # running on app engine: use compatible database and file storage
+    DATABASES = {
+        'default': {
+            'ENGINE': 'google.appengine.ext.django.backends.rdbms',
+            'INSTANCE': 'mapfasten1:mapfasten', # the cloud sql "instance name"
+            'NAME': 'mapfasten', # the name of the database
+        }
     }
-}
+    DEFAULT_FILE_STORAGE = 'storage.AppEngineBlobStorage'
+else:
+    # running in development: use a local database.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'dev.db'
+        }
+    }
+
+if USING_DJANGO_DEV_SERVER:
+    # simplest cache backend, works everywhare and doesn't require any extra installation
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'TIMEOUT': 0
+        }
+    }
+else:
+    # high performance back end, works on both native django and app engine platforms
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+            'TIMEOUT': 0
+        }
+    }
