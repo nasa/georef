@@ -38,6 +38,6 @@ handlers:
   script: submodules/geocamAppEngineLibs/main.py
 
 env_variables:
-  DJANGO_SETTINGS_MODULE: 'geocamMapFasten.settings'
+  DJANGO_SETTINGS_MODULE: 'settings'
   DJANGO_SCRIPT_NAME: '/'
   SERVER_ENV: 'Google App Engine'
