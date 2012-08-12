@@ -27,6 +27,10 @@ libraries:
 
 handlers:
 
+- url: /favicon.ico
+  static_files: build/static/mapFasten/icons/mapFastenFavicon.ico
+  upload: build/static/mapFasten/icons/mapFastenFavicon.ico
+
 - url: /static
   static_dir: build/static
 

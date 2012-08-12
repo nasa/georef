@@ -150,8 +150,8 @@ SITE_TITLE = 'MapFasten'
 
 GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True
 
-# override this in settings for production use
-CACHES = CACHES = {
+# override this in settings.py for production use
+CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
