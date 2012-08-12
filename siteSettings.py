@@ -105,9 +105,7 @@ SECRET_KEY = '9o0a50i$_9rw5l8-==!lhm$%j)--+(pwbn52yglj1)ndjd)du#'
 MIDDLEWARE_CLASSES = (
     'geocamUtil.middleware.LogErrorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'geocamUtil.middleware.SecurityMiddleware',
