@@ -24,6 +24,7 @@ urlpatterns = patterns(
         'logout'),
 
     url(r'^', include('geocamTiePoint.urls')),
+    url(r'^', include('mapFastenApp.urls')),
 
 )
 

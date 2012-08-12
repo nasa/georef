@@ -34,8 +34,13 @@ handlers:
 - url: /static
   static_dir: build/static
 
+- url: /admin/.*
+  script: submodules/geocamAppEngineLibs/main.py
+  login: admin
+
 - url: /.*
   script: submodules/geocamAppEngineLibs/main.py
+  login: required
 
 env_variables:
   DJANGO_SETTINGS_MODULE: 'settings'

@@ -1,1 +1,17 @@
 <img src="{{ STATIC_URL }}mapFasten/icons/mapFastenLogo.png" style="margin-left: 5px; margin-top: 5px;"/>
+<div id="navBar">
+  <span class="navLink"><a href="{% url mapFasten_home %}">Home</a></span>
+  <span class="navLink"><a href="{% url geocamTiePoint_overlayIndex %}">Map Overlays</a></span>
+  {% if user.is_authenticated %}
+    <a href="{{ logout_url }}"
+       title="Logout">
+      <span class="in" style="color: #008; font-weight: bold;">Logout</span>
+    </a>
+    <span style="font-weight: bold;">{{ user.first_name }}</span>
+  {% else %} <!-- user.is_authenticated -->
+    <a href="{{ login_url_with_next }}"
+       title="Login">
+      <span class="in" style="color: #008; font-weight: bold;">Login</span>
+    </a>
+  {% endif %} <!-- user.is_authenticated (else) -->
+</div>

@@ -155,6 +155,7 @@ if USING_APP_ENGINE:
         }
     }
     DEFAULT_FILE_STORAGE = 'storage.AppEngineBlobStorage'
+    MIDDLEWARE_CLASSES += ('appEngineAuthMiddleware.AuthenticationMiddleware',)
 else:
     # running in development: use a local database.
     DATABASES = {
