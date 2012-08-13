@@ -16,6 +16,8 @@
 #
 # This file *should* be checked into git.
 
+from django.conf import global_settings
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 import os
@@ -134,9 +136,11 @@ GEOCAM_UTIL_SECURITY_SSL_REQUIRED_BY_DEFAULT = False
 GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS = False
 GEOCAM_UTIL_SECURITY_LOGIN_REQUIRED_BY_DEFAULT = 'write'
 
+# note: LOGIN_URL and LOGOUT_URL will not be respected on app engine when using
+# google's integrated auth system. LOGIN_REDIRECT_URL is respected.
 LOGIN_URL = SCRIPT_NAME + 'accounts/login/'
 LOGOUT_URL = SCRIPT_NAME + 'accounts/logout/'
-LOGIN_DEFAULT_NEXT_URL = SCRIPT_NAME + 'home/'
+LOGIN_REDIRECT_URL = SCRIPT_NAME
 
 SITE_TITLE = 'MapFasten'
 
@@ -144,6 +148,8 @@ GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True
 
 USING_APP_ENGINE = (os.getenv('SERVER_ENV', '').startswith('Google App Engine')
                     or os.getenv('SETTINGS_MODE') == 'appengine')
+
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS
 
 if USING_APP_ENGINE:
     # running on app engine: use compatible database and file storage
@@ -156,6 +162,10 @@ if USING_APP_ENGINE:
     }
     DEFAULT_FILE_STORAGE = 'storage.AppEngineBlobStorage'
     MIDDLEWARE_CLASSES += ('appEngineAuthMiddleware.AuthenticationMiddleware',)
+    TEMPLATE_CONTEXT_PROCESSORS += (
+        'appEngineContextProcessors.AuthUrlsContextProcessor',
+    )
+
 else:
     # running in development: use a local database.
     DATABASES = {
@@ -164,6 +174,9 @@ else:
             'NAME': 'dev.db'
         }
     }
+    TEMPLATE_CONTEXT_PROCESSORS += (
+        'geocamUtil.context_processors.AuthUrlsContextProcessor.AuthUrlsContextProcessor',
+    )
 
 if USING_DJANGO_DEV_SERVER:
     # simplest cache backend, works everywhare and doesn't require any extra installation
