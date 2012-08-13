@@ -160,10 +160,13 @@ if USING_APP_ENGINE:
             'NAME': 'mapfasten', # the name of the database
         }
     }
-    DEFAULT_FILE_STORAGE = 'storage.AppEngineBlobStorage'
-    MIDDLEWARE_CLASSES += ('appEngineAuthMiddleware.AuthenticationMiddleware',)
+    DEFAULT_FILE_STORAGE = 'geocamAppEngine.storage.BlobStorage'
+    MIDDLEWARE_CLASSES += (
+        'geocamAppEngine.middleware.AuthenticationMiddleware',
+        'mapFastenApp.middleware.ClosedBetaMiddleware',
+    )
     TEMPLATE_CONTEXT_PROCESSORS += (
-        'appEngineContextProcessors.AuthUrlsContextProcessor',
+        'geocamAppEngine.context_processors.AuthUrlsContextProcessor',
     )
 
 else:
@@ -179,7 +182,7 @@ else:
     )
 
 if USING_DJANGO_DEV_SERVER:
-    # simplest cache backend, works everywhare and doesn't require any extra installation
+    # simplest cache backend, works everywhere and doesn't require any extra installation
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -188,6 +191,7 @@ if USING_DJANGO_DEV_SERVER:
     }
 else:
     # high performance back end, works on both native django and app engine platforms
+    # when installed properly.
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
