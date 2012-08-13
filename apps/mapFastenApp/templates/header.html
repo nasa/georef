@@ -7,7 +7,7 @@
        title="Logout">
       <span class="in" style="color: #008; font-weight: bold;">Logout</span>
     </a>
-    <span style="font-weight: bold;">{{ user.first_name }}</span>
+    <span style="font-weight: bold;">{{ user.username }}</span>
   {% else %} <!-- user.is_authenticated -->
     <a href="{{ login_url_with_next }}"
        title="Login">

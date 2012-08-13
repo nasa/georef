@@ -1,0 +1,46 @@
+{% extends "base2.html" %}
+
+{% block popupmenu %}<!-- Zero out pop up menu -->{% endblock %}
+{% block menubar %}
+<ul id="menu_bar_items">
+    <li class="home" onclick="go_to_view('/');">&nbsp;</li>
+</ul>
+{% endblock %}
+
+{% block contents %}
+<h1 class="geocam_table_title">Create an account</h1>
+
+<div style="max-width: 600px;">
+<blockquote>
+  {% include "registration/terms.html" %}
+</blockquote>
+
+<form name="register" method="POST" action="">
+    <table class="geocam_table" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px;">
+        {% for field in user_form %}
+            <tr>
+                <td style="padding-top: 20px; padding-bottom: 0px;">{{ field.label_tag }}:</td>
+            </tr>
+            {% if field.errors  %}
+                {% for error in field.errors  %}
+                    <tr>
+                        <td colspan="2" style="color:red;">{{ error|escape }}</td>
+                    </tr>
+                {%  endfor %}
+            {% endif %}
+            <tr>
+                <td>{{ field }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2">
+                <input type="submit" id="hidden_submit" name="hidden_submit" value="Create Account" class="big_awesome_button" />
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="next" value="{% if request.REQUEST.next %}{{ request.REQUEST.next|safe }}{% else %}{% url home %}{% endif %}">
+    {% csrf_token %}
+</form>
+</div>
+
+{% endblock %}
