@@ -135,6 +135,7 @@ GEOCAM_UTIL_SECURITY_ENABLED = False  # not USING_DJANGO_DEV_SERVER
 GEOCAM_UTIL_SECURITY_SSL_REQUIRED_BY_DEFAULT = False
 GEOCAM_UTIL_SECURITY_REQUIRE_ENCRYPTED_PASSWORDS = False
 GEOCAM_UTIL_SECURITY_LOGIN_REQUIRED_BY_DEFAULT = 'write'
+GEOCAM_UTIL_SECURITY_ACCEPT_AUTH_TYPES = ('basic',)
 
 # note: LOGIN_URL and LOGOUT_URL will not be respected on app engine when using
 # google's integrated auth system. LOGIN_REDIRECT_URL is respected.
@@ -146,20 +147,35 @@ SITE_TITLE = 'MapFasten'
 
 GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True
 
-USING_APP_ENGINE = (os.getenv('SERVER_ENV', '').startswith('Google App Engine')
-                    or os.getenv('SETTINGS_MODE') == 'appengine')
+USING_APP_ENGINE_DEV_SERVER = os.getenv('SERVER_SOFTWARE', '').startswith('Development/')
+USING_APP_ENGINE_REAL = (os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')
+                               or os.getenv('SETTINGS_MODE') == 'appengine')
+USING_APP_ENGINE = USING_APP_ENGINE_DEV_SERVER or USING_APP_ENGINE_REAL
 
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS
 
 if USING_APP_ENGINE:
-    # running on app engine: use compatible database and file storage
+    # sqlite doesn't work in real app engine environment, use google cloud sql
     DATABASES = {
         'default': {
             'ENGINE': 'google.appengine.ext.django.backends.rdbms',
             'INSTANCE': 'mapfasten1:mapfasten', # the cloud sql "instance name"
-            'NAME': 'mapfasten', # the name of the database
+            'NAME': 'make your own dev sandbox and overwrite this value in settings.py',
         }
     }
+else:
+    # use local sqlite database
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'dev.db'
+        }
+    }
+
+if USING_APP_ENGINE_REAL:
+    DATABASES['default']['NAME'] = 'mapfasten'
+
+if USING_APP_ENGINE:
     DEFAULT_FILE_STORAGE = 'geocamAppEngine.storage.BlobStorage'
     MIDDLEWARE_CLASSES += (
         'geocamAppEngine.middleware.AuthenticationMiddleware',
@@ -170,32 +186,25 @@ if USING_APP_ENGINE:
     )
 
 else:
-    # running in development: use a local database.
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'dev.db'
-        }
-    }
     TEMPLATE_CONTEXT_PROCESSORS += (
         'geocamUtil.context_processors.AuthUrlsContextProcessor.AuthUrlsContextProcessor',
     )
 
-if USING_DJANGO_DEV_SERVER:
-    # simplest cache backend, works everywhere and doesn't require any extra installation
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'TIMEOUT': 0
-        }
+# easy zero-install caching setup, fine with django dev server
+SIMPLE_CACHE_ = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 0
     }
-else:
-    # high performance back end, works on both native django and app engine platforms
-    # when installed properly.
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': '127.0.0.1:11211',
-            'TIMEOUT': 0
-        }
+}
+
+# real caching setup, works better in multi-process environment
+MEMCACHED_CACHE_ = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 0
     }
+}
+
+CACHES = SIMPLE_CACHE_
