@@ -1,0 +1,5 @@
+# This file specifies command-line flags that ./manage.py lint should
+# pass to the gjslint Google Closure JavaScript style checker.
+
+# don't complain about missing jsdoc comments
+--nojsdoc
