@@ -168,5 +168,25 @@
             "email": "youngwookly@gmail.com",
             "date_joined": "2012-08-13 20:17:50"
         }
+    },
+
+    {
+        "pk": 13,
+        "model": "auth.user",
+        "fields": {
+            "username": "dcmaplab",
+            "first_name": "David",
+            "last_name": "Coggeshall",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-08-13 20:17:50",
+            "groups": [],
+            "user_permissions": [],
+            "password": "!",
+            "email": "dcmaplab@gmail.com",
+            "date_joined": "2012-08-13 20:17:50"
+        }
     }
+
 ]
