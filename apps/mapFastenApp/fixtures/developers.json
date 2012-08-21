@@ -244,6 +244,62 @@
             "email": "csadams@google.com",
             "date_joined": "2012-08-13 20:17:50"
         }
-    }
+    },
 
+    {
+        "pk": 17,
+        "model": "auth.user",
+        "fields": {
+            "username": "terrence.fong",
+            "first_name": "Terrence",
+            "last_name": "Fong",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-08-13 20:17:50",
+            "groups": [],
+            "user_permissions": [],
+            "password": "!",
+            "email": "terrence.fong@nasa.gov",
+            "date_joined": "2012-08-13 20:17:50"
+        }
+    },
+
+    {
+        "pk": 18,
+        "model": "auth.user",
+        "fields": {
+            "username": "kpy",
+            "first_name": "Ka-Ping",
+            "last_name": "Yee",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-08-13 20:17:50",
+            "groups": [],
+            "user_permissions": [],
+            "password": "!",
+            "email": "kpy@google.com",
+            "date_joined": "2012-08-13 20:17:50"
+        }
+    },
+
+    {
+        "pk": 19,
+        "model": "auth.user",
+        "fields": {
+            "username": "nigelsnoad",
+            "first_name": "Nigel",
+            "last_name": "Snoad",
+            "is_active": true,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2012-08-13 20:17:50",
+            "groups": [],
+            "user_permissions": [],
+            "password": "!",
+            "email": "nigelsnoad@google.com",
+            "date_joined": "2012-08-13 20:17:50"
+        }
+    }
 ]
