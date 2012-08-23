@@ -89,9 +89,6 @@ STATIC_URL = SCRIPT_NAME + 'static/'
 # Awesome. Needed in Django 1.3 but causes deprecation warning in Django 1.4.
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '9o0a50i$_9rw5l8-==!lhm$%j)--+(pwbn52yglj1)ndjd)du#'
-
 # List of callables that know how to import templates from various sources.
 #TEMPLATE_LOADERS = global_settings.TEMPLATE_LOADERS + (
 #)
