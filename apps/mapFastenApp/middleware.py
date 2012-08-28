@@ -4,7 +4,6 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponseForbidden
 
 

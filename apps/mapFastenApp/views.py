@@ -4,7 +4,7 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 

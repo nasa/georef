@@ -64,12 +64,14 @@ load-plugins=
 
 #   E1103 = Instance of 'x' has no 'y' member (but some types could not be inferred)
 #   R0801 = Similar lines in N files
+#   W0201 = Attribute 'x' defined outside __init__
+#   R0922 = Abstract class is only referenced 1 times
 
 # Disable the message, report, category or checker with the given id(s). You
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-disable=W0142,W0403,R0201,W0212,W0613,W0232,R0903,R0904,W0614,C0111,C0301,R0913,C0103,R0914,W0603,R0912,R0915,R0902,F0401,W0402,W0614,C0111,I0011,E1103,R0801
+disable=W0142,W0403,R0201,W0212,W0613,W0232,R0903,R0904,W0614,C0111,C0301,R0913,C0103,R0914,W0603,R0912,R0915,R0902,F0401,W0402,W0614,C0111,I0011,E1103,R0801,W0201,R0922
 
 
 [REPORTS]
