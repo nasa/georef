@@ -142,9 +142,10 @@ SITE_TITLE = 'MapFasten'
 
 GEOCAM_UTIL_INSTALLER_USE_SYMLINKS = True
 
-USING_APP_ENGINE_DEV_SERVER = os.getenv('SERVER_SOFTWARE', '').startswith('Development/')
+USING_APP_ENGINE_DEV_SERVER = (os.getenv('SERVER_SOFTWARE', '').startswith('Development/')
+                               or os.getenv('SETTINGS_MODE') == 'devappengine')
 USING_APP_ENGINE_REAL = (os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')
-                               or os.getenv('SETTINGS_MODE') == 'appengine')
+                         or os.getenv('SETTINGS_MODE') == 'appengine')
 USING_APP_ENGINE = USING_APP_ENGINE_DEV_SERVER or USING_APP_ENGINE_REAL
 
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS
