@@ -4,7 +4,7 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-# Configuration file when hosting geocamResponderMaps on Google App Engine.
+# Configuration file when hosting geocamMapFasten on Google App Engine.
 
 # Replace application name with your application.
 application: mapfasten
