@@ -95,10 +95,8 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 MIDDLEWARE_CLASSES = (
     'geocamUtil.middleware.LogErrorsMiddleware',
+) + global_settings.MIDDLEWARE_CLASSES + (
     'django.middleware.gzip.GZipMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'geocamUtil.middleware.SecurityMiddleware',
 )
 
