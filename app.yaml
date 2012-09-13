@@ -38,6 +38,13 @@ handlers:
   script: submodules/geocamAppEngineLibs/main.py
   login: admin
 
+# backend instances do not respond to 'login: required' urls
+# but do respond to 'login: admin' urls.
+
+- url: /backend/.*
+  script: submodules/geocamAppEngineLibs/main.py
+  login: admin
+
 - url: /.*
   script: submodules/geocamAppEngineLibs/main.py
   login: required
@@ -45,3 +52,30 @@ handlers:
 env_variables:
   DJANGO_SETTINGS_MODULE: 'settings'
   DJANGO_SCRIPT_NAME: '/'
+
+# deployment is faster if we skip more files.
+# https://developers.google.com/appengine/docs/python/config/appconfig#Skipping%5FFiles
+
+skip_files:
+- ^(.*/)?app\.yaml$
+- ^(.*/)?app\.yml$
+- ^(.*/)?index\.yaml$
+- ^(.*/)?index\.yml$
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+- ^dev.db$
+- ^data/
+- ^build/management/
+- ^build/bin/
+- /doc_src/
+- ^apps/mapFastenApp/static
+- ^submodules/geocamAppEngineLibs/staticfiles/tests
+- ^submodules/geocamAppEngineLibs/appconf/tests
+- ^submodules/geocamAppEngineLibs/tagging/tests
+- ^submodules/geocamAppEngineLibs/django_digest/test
+- ^submodules/geocamAppEngineLibs/pysqlite2/test
+- ^submodules/geocamTiePoint
+- ^submodules/geocamUtilWeb
