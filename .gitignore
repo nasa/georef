@@ -13,4 +13,4 @@ media/css/*.r*.css
 /settings.py
 /sourcme.sh
 /build/
-/data/
+/data
