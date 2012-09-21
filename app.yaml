@@ -45,6 +45,11 @@ handlers:
   script: submodules/geocamAppEngineLibs/main.py
   login: admin
 
+# don't require login for any urls under /public
+
+- url: /public/.*
+  script: submodules/geocamAppEngineLibs/main.py
+
 - url: /.*
   script: submodules/geocamAppEngineLibs/main.py
   login: required
