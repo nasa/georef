@@ -9,7 +9,7 @@
 # Replace application name with your application.
 application: mapfasten
 
-version: 1
+version: mydev
 runtime: python27
 api_version: 1
 threadsafe: no
