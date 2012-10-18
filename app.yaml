@@ -84,3 +84,6 @@ skip_files:
 - ^submodules/geocamAppEngineLibs/pysqlite2/test
 - ^submodules/geocamTiePoint
 - ^submodules/geocamUtilWeb
+- .*geocamTiePoint/export.*
+- .*t?gz$
+- .*build/static/geocamTiePoint/overlay_images/.*
