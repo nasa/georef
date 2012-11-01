@@ -1,17 +1,17 @@
-<a href="{% url mapFasten_home %}"><img src="{{ STATIC_URL }}mapFasten/icons/mapFastenLogo.png" width="220" height="50" style="margin-left: 5px; margin-top: 5px;"/></a>
-<div id="navBar">
-  <span class="navLink"><a href="{% url mapFasten_home %}">Home</a></span>
-  <span class="navLink"><a href="{% url geocamTiePoint_overlayIndex %}">Map Overlays</a></span>
+<div id="navbar" class="navbar">
+  <div class="navbar-inner">
+    <ul id="navlist" class="nav">
+      <li><a href="/"><img src="{{ STATIC_URL }}mapFasten/icons/mapFastenLogo.png"/></a></li>
+      <li class="nav_pad_vertical navbar-text"><a href="{% url geocamTiePoint_backbone %}#overlays/">List Overlays</a></li>
+    </ul>
+    <p class="pull-right navbar-text" style="float:right">
   {% if user.is_authenticated %}
     <a href="{{ logout_url }}"
-       title="Logout">
-      <span class="in" style="color: #008; font-weight: bold;">Logout</span>
-    </a>
-    <span style="font-weight: bold;">{{ user.username }}</span>
+       title="Logout">Logout</a>
   {% else %} <!-- user.is_authenticated -->
     <a href="{{ login_url_with_next }}"
-       title="Login">
-      <span class="in" style="color: #008; font-weight: bold;">Login</span>
-    </a>
+       title="Login">Login</a>
   {% endif %} <!-- user.is_authenticated (else) -->
+    </p>
+  </div>
 </div>
