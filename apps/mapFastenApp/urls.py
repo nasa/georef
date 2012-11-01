@@ -5,7 +5,6 @@
 # __END_LICENSE__
 
 from django.conf.urls.defaults import url, patterns
-from django.shortcuts import redirect
 
 urlpatterns = patterns(
     'mapFastenApp.views',

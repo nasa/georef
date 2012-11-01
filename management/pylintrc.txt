@@ -68,11 +68,13 @@ load-plugins=
 #   R0922 = Abstract class is only referenced 1 times
 #   W0231 = __init__ method from base class 'x' is not called
 
+#   R0911 = Too many return statements
+
 # Disable the message, report, category or checker with the given id(s). You
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-disable=W0142,W0403,R0201,W0212,W0613,W0232,R0903,R0904,W0614,C0111,C0301,R0913,C0103,R0914,W0603,R0912,R0915,R0902,F0401,W0402,W0614,C0111,I0011,E1103,R0801,W0201,R0922,W0231
+disable=W0142,W0403,R0201,W0212,W0613,W0232,R0903,R0904,W0614,C0111,C0301,R0913,C0103,R0914,W0603,R0912,R0915,R0902,F0401,W0402,W0614,C0111,I0011,E1103,R0801,W0201,R0922,W0231,R0911
 
 
 [REPORTS]

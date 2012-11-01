@@ -86,16 +86,16 @@ def dosys(cmd, continueOnError=False):
     ret = os.system(cmd)
     if ret != 0:
         if continueOnError:
-            logging.warning('WARNING: Command returned non-zero return value %d' % ret)
+            logging.warning('WARNING: Command returned non-zero return value %d', ret)
         else:
-            logging.error('ERROR: Command returned non-zero return value %d' % ret)
+            logging.error('ERROR: Command returned non-zero return value %d', ret)
             sys.exit(1)
 
 
 def writeFileMakeDir(path, text):
-    dir = os.path.dirname(path)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
+    d = os.path.dirname(path)
+    if not os.path.exists(d):
+        os.makedirs(d)
     f = file(path, 'w')
     f.write(text + '\n')
     f.close()
@@ -103,10 +103,10 @@ def writeFileMakeDir(path, text):
 
 def fillTemplate(inputFile, outputFile, context):
     if os.path.exists(outputFile):
-        logging.warning('WARNING: File %s exists, not overwriting. Move current version out of the way to regenerate' % outputFile)
+        logging.warning('WARNING: File %s exists, not overwriting. Move current version out of the way to regenerate', outputFile)
         return
 
-    logging.info('generating %s' % outputFile)
+    logging.info('generating %s', outputFile)
 
     from django.template import Template, Context
     from django.conf import settings
@@ -140,9 +140,9 @@ def linkSubmodules(opts):
         relativeSrc = '../%s' % src
         dst = 'apps/%s' % appName
         if os.path.lexists(dst):
-            logging.debug('  %s -> %s skipped (already exists)' % (dst, relativeSrc))
+            logging.debug('  %s -> %s skipped (already exists)', dst, relativeSrc)
         else:
-            logging.debug('  %s -> %s' % (dst, relativeSrc))
+            logging.debug('  %s -> %s', dst, relativeSrc)
             os.symlink(relativeSrc, dst)
 
 
@@ -162,7 +162,7 @@ def installRequirements(reqsFile):
     if hasRequirements(reqsFile):
         dosys('%spip install -r %s' % (sudoStr, reqsFile))
     else:
-        logging.info('requirements file %s is empty' % reqsFile)
+        logging.info('requirements file %s is empty', reqsFile)
 
 
 def installSubModuleRequirements(opts):
@@ -192,7 +192,7 @@ def needSettings(opts):
 
 
 def genSettings(opts):
-    secretKey = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
+    secretKey = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for _i in range(50)])
 
     fillTemplate('management/templates/%s' % SETTINGS_NAME,
                  SETTINGS_NAME,
@@ -229,9 +229,9 @@ def doAction(opts, action):
 
     if status != 'NEEDED':
         if opts.retry:
-            logging.info('Would skip %s, status is %s, but running in retry mode' % (action['name'], status))
+            logging.info('Would skip %s, status is %s, but running in retry mode', action['name'], status)
         else:
-            logging.info('Skipping step %s, status is %s' % (action['name'], status))
+            logging.info('Skipping step %s, status is %s', action['name'], status)
             return
 
     # confirm with user
@@ -260,14 +260,14 @@ def doit(opts, args):
     if args:
         for arg in args:
             if arg not in ACTION_DICT:
-                print >>sys.stderr, 'ERROR: there is no action %s' % arg
-                print >>sys.stderr, 'Available actions are: %s' % (' '.join([a['name'] for a in ACTIONS]))
+                print >> sys.stderr, 'ERROR: there is no action %s' % arg
+                print >> sys.stderr, 'Available actions are: %s' % (' '.join([a['name'] for a in ACTIONS]))
                 sys.exit(1)
         actions = [ACTION_DICT[arg] for arg in args]
     else:
         actions = ACTIONS
 
-    logging.info('Working in %s' % os.getcwd())
+    logging.info('Working in %s', os.getcwd())
     for action in actions:
         doAction(opts, action)
 
