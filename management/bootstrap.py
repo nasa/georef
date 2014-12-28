@@ -277,7 +277,7 @@ def doit(opts, args):
     print '\nFinished bootstrapping\n'
 
     sys.path.insert(0, os.path.dirname(opts.siteDir))
-    from geocamMapFasten.djangoWsgi import getEnvironmentFromSourceMe
+    from geoRef.djangoWsgi import getEnvironmentFromSourceMe
     getEnvironmentFromSourceMe()
 
 

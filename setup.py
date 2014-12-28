@@ -21,7 +21,7 @@ def read_file(filename):
         return ''
 
 # Use the docstring of the __init__ file to be the description
-#DESC = " ".join(__import__('geocamMapFasten').__doc__.splitlines()).strip()
+#DESC = " ".join(__import__('geoRef').__doc__.splitlines()).strip()
 DESC = ""
 
 PROJ_ROOT = op.abspath(op.dirname(__file__))
@@ -173,10 +173,10 @@ class MediaCommand(Command):
 
 
 setup(
-    name="geocamMapFasten",
-    version='1.0',  # __import__('geocamMapFasten').get_version().replace(' ', '-'),
+    name="geoRef",
+    version='1.0',  # __import__('geoRef').get_version().replace(' ', '-'),
     url='',
-    author='mfsmith3',
+    author='mfsmith3, ylee8',
     author_email='',
     description=DESC,
     long_description=read_file('README'),
