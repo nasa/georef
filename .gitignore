@@ -14,3 +14,4 @@ media/css/*.r*.css
 /sourcme.sh
 /build/
 /data
+manage_pydev.py
