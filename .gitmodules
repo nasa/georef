@@ -1,9 +1,9 @@
 [submodule "submodules/geocamAppEngineLibs"]
 	path = submodules/geocamAppEngineLibs
-	url = git://github.com/yglee/geocamAppEngineLibs.git
+	url = https://babelfish.arc.nasa.gov/git/georef_geocamappenginelibs
 [submodule "submodules/geocamTiePoint"]
 	path = submodules/geocamTiePoint
-	url = git://github.com/yglee/geocamTiePoint.git
+	url = https://babelfish.arc.nasa.gov/git/georef_geocamtiepoint
 [submodule "submodules/geocamUtilWeb"]
 	path = submodules/geocamUtilWeb
-	url = git://github.com/yglee/geocamUtilWeb.git
+	url = https://babelfish.arc.nasa.gov/git/georef_geocamutilweb
