@@ -7,3 +7,6 @@
 [submodule "submodules/geocamUtilWeb"]
 	path = submodules/geocamUtilWeb
 	url = https://babelfish.arc.nasa.gov/git/georef_geocamutilweb
+[submodule "submodules/georef_imageregistration"]
+	path = submodules/georef_imageregistration
+	url = https://babelfish.arc.nasa.gov/git/georef_imageregistration
