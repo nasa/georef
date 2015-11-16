@@ -95,6 +95,9 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 MIDDLEWARE_CLASSES = (
     'geocamUtil.middleware.LogErrorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
 ) + global_settings.MIDDLEWARE_CLASSES + (
     'django.middleware.gzip.GZipMiddleware',
     'geocamUtil.middleware.SecurityMiddleware',
@@ -114,11 +117,8 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'mapFastenApp',
     'geocamTiePoint',
-
     'geocamUtil',
-
     'django_digest',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

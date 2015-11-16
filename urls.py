@@ -4,17 +4,17 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from django.conf.urls.defaults import *  # pylint: disable=W0401
+from django.conf.urls import *  # pylint: disable=W0401
 from django.conf import settings
 from django.contrib import admin
+from django.views.generic import RedirectView, TemplateView
+
 admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-
     url(r'^accounts/login/$', 'django.contrib.auth.views.login',
      {'loginRequired': False, # avoid redirect loop
       }, 'login'),
@@ -22,7 +22,6 @@ urlpatterns = patterns(
         # show logout page instead of redirecting to log in again
         {'loginRequired': False},
         'logout'),
-
     url(r'^', include('geocamTiePoint.urls')),
     url(r'^', include('mapFastenApp.urls')),
 
@@ -49,8 +48,9 @@ if settings.USE_STATIC_SERVE:
             dict(document_root=settings.DATA_ROOT,
                  show_indexes=True,
                  readOnly=True)),
-
-        url(r'^favicon.ico$', 'django.views.generic.simple.redirect_to',
-            {'url': settings.STATIC_URL + 'mapFasten/icons/mapFastenFavicon.ico',
-             'readOnly': True}),
+                            
+        url (r'^favicon\.ico$', 
+             RedirectView.as_view(url=settings.STATIC_URL + 'mapFasten/icons/mapFastenFavicon.ico'), 
+             {'readOnly': True}),
         )
+

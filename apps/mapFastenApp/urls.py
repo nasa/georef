@@ -4,7 +4,7 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from django.conf.urls.defaults import url, patterns
+from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns(
     'mapFastenApp.views',
