@@ -12,11 +12,11 @@ source {{ virtualEnvDir }}/bin/activate
 # Set DJANGO_SCRIPT_NAME to the URL prefix for Django on your web server (with leading slash
 # and trailing slash).  This setting is ignored if using the built-in Django development web
 # server.
-export DJANGO_SCRIPT_NAME='/geoRef/'
+export DJANGO_SCRIPT_NAME='/georef/'
 
 # The auto-generated PYTHONPATH usually works, but you might need to add more directories
 # depending on how you installed everything.
 export PYTHONPATH={{ parentDir }}:{{ appsDir }}:$PYTHONPATH
 
 # You should not need to change this.
-export DJANGO_SETTINGS_MODULE='geoRef.settings'
+export DJANGO_SETTINGS_MODULE='georef.settings'
