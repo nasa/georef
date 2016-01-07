@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     'mapFastenApp',
     'geocamTiePoint',
     'geocamUtil',
+    'georef_imageregistration',
     'django_digest',
     'django.contrib.admin',
     'django.contrib.auth',
