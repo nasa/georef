@@ -1,8 +1,18 @@
 #!/usr/bin/env python
 # __BEGIN_LICENSE__
-# Copyright (C) 2008-2010 United States Government as represented by
-# the Administrator of the National Aeronautics and Space Administration.
-# All Rights Reserved.
+# Copyright (c) 2015, United States Government, as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All rights reserved.
+#
+# The xGDS platform is licensed under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0.
+#
+# Unless required by applicable law or agreed to in writing, software distributed
+# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+# CONDITIONS OF ANY KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations under the License.
 # __END_LICENSE__
 
 """
@@ -27,7 +37,6 @@ import sys
 from glob import glob
 import logging
 from random import choice
-import re
 
 DEFAULT_SITE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -36,26 +45,19 @@ SETTINGS_NAME = 'settings.py'
 STATUS_PATH_TEMPLATE = 'build/management/bootstrap/%sStatus.txt'
 
 ACTIONS = (dict(name='gitInitSubmodules',
-                desc="Init and update submodules",
+                desc="init and update submodules",
                 confirm=True),
-           dict(name='gitSubmodulesMasterBranch',
-                desc='Set submodules to be on their master branch for development',
+           dict(name='linkSubmodules',
+                desc='link submodules into apps directory',
                 confirm=True),
-           #dict(name='linkSubmodules',
-           #     desc='Link submodules into apps directory',
-           #     confirm=True),
-           dict(name='installSubModuleRequirements',
-                desc='Install Python modules listed in the requirements for each submodule',
-                confirm=True),
-           dict(name='installSiteRequirements',
-                desc='Install Python modules listed in the site-level requirements',
-                confirm=True),
+           dict(name='installDjango',
+                desc='install Django',
+                confirm=True,
+                needed='needDjango'),
            dict(name='genSourceme',
-                needed='needSourceme',
-                desc='Create initial sourceme.sh file'),
+                needed='needSourceme'),
            dict(name='genSettings',
-                needed='needSettings',
-                desc='Create initial settings.py file'),
+                needed='needSettings'),
            )
 ACTION_DICT = dict([(a['name'], a) for a in ACTIONS])
 
@@ -82,38 +84,29 @@ def dosys(cmd, continueOnError=False):
         # force print before user gets password prompt
         print 'running: ' + cmd
     else:
-        logging.info('Running: ' + cmd)
+        logging.info('running: ' + cmd)
     ret = os.system(cmd)
     if ret != 0:
         if continueOnError:
-            logging.warning('WARNING: Command returned non-zero return value %d', ret)
+            logging.warning('warning: command returned non-zero return value %d' % ret)
         else:
-            logging.error('ERROR: Command returned non-zero return value %d', ret)
+            logging.error('error: command returned non-zero return value %d' % ret)
             sys.exit(1)
 
 
 def writeFileMakeDir(path, text):
-    d = os.path.dirname(path)
-    if not os.path.exists(d):
-        os.makedirs(d)
+    theDir = os.path.dirname(path)
+    if not os.path.exists(theDir):
+        os.makedirs(theDir)
     f = file(path, 'w')
     f.write(text + '\n')
     f.close()
 
 
 def fillTemplate(inputFile, outputFile, context):
-    if os.path.exists(outputFile):
-        logging.warning('WARNING: File %s exists, not overwriting. Move current version out of the way to regenerate', outputFile)
-        return
-
-    logging.info('generating %s', outputFile)
-
-    from django.template import Template, Context
-    from django.conf import settings
-    if not settings.configured:
-        settings.configure()
+    from jinja2 import Template
     tmpl = Template(file(inputFile, 'r').read())
-    text = tmpl.render(Context(context))
+    text = tmpl.render(context)
     file(outputFile, 'w').write(text)
 
 ######################################################################
@@ -123,11 +116,6 @@ def fillTemplate(inputFile, outputFile, context):
 def gitInitSubmodules(opts):
     dosys('git submodule init')
     dosys('git submodule update')
-
-
-def gitSubmodulesMasterBranch(opts):
-    # avoid "(no branch)"
-    dosys('git submodule foreach git checkout master')
 
 
 def linkSubmodules(opts):
@@ -140,38 +128,27 @@ def linkSubmodules(opts):
         relativeSrc = '../%s' % src
         dst = 'apps/%s' % appName
         if os.path.lexists(dst):
-            logging.debug('  %s -> %s skipped (already exists)', dst, relativeSrc)
+            logging.debug('  %s -> %s skipped (already exists)' % (dst, relativeSrc))
         else:
-            logging.debug('  %s -> %s', dst, relativeSrc)
+            logging.debug('  %s -> %s' % (dst, relativeSrc))
             os.symlink(relativeSrc, dst)
 
 
-def hasRequirements(reqsFile):
-    for line in file(reqsFile, 'r'):
-        if not re.match(r'^\s*(\#.*)?$', line):
-            return True
+def needDjango(opts):
+    try:
+        import django
+    except ImportError:
+        return True
     return False
 
 
-def installRequirements(reqsFile):
-    needSudo = 'VIRTUAL_ENV' not in os.environ
+def installDjango(opts):
+    needSudo = 'VIRTUALENV' not in os.environ
     if needSudo:
         sudoStr = 'sudo '
     else:
         sudoStr = ''
-    if hasRequirements(reqsFile):
-        dosys('%spip install -r %s' % (sudoStr, reqsFile))
-    else:
-        logging.info('requirements file %s is empty', reqsFile)
-
-
-def installSubModuleRequirements(opts):
-    for reqs in glob('submodules/*/requirements.txt'):
-        installRequirements(reqs)
-
-
-def installSiteRequirements(opts):
-    installRequirements('management/siteRequirements.txt')
+    dosys('%spip install django' % sudoStr)
 
 
 def needSourceme(opts):
@@ -179,9 +156,11 @@ def needSourceme(opts):
 
 
 def genSourceme(opts):
+    logging.info('generating %s' % SOURCEME_NAME)
+
     fillTemplate('management/templates/%s' % SOURCEME_NAME,
                  SOURCEME_NAME,
-                 dict(virtualEnvDir=os.environ.get('VIRTUAL_ENV', None),
+                 dict(virtualEnvDir=os.environ.get('VIRTUALENV', None),
                       parentDir=os.path.dirname(os.path.abspath(os.getcwd())),
                       appsDir=os.path.abspath('apps')
                       ))
@@ -192,7 +171,9 @@ def needSettings(opts):
 
 
 def genSettings(opts):
-    secretKey = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for _i in range(50)])
+    logging.info('generating %s' % SETTINGS_NAME)
+
+    secretKey = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
 
     fillTemplate('management/templates/%s' % SETTINGS_NAME,
                  SETTINGS_NAME,
@@ -211,8 +192,6 @@ def needAction(opts, action):
 
 
 def doAction(opts, action):
-    status = 'NEEDED'
-
     # check if we need to do the action
     neededName = action.get('needed', None)
     if neededName:
@@ -220,22 +199,17 @@ def doAction(opts, action):
         neededFunc = globals()[neededName]
         actionIsNeeded = neededFunc(opts)
         if not actionIsNeeded:
-            status = 'NOT_NEEDED'
+            logging.info('skipping step %s, not needed' % action['name'])
+            return
     else:
         # standard check function
-        checkStatus = needAction(opts, action)
-        if checkStatus:
-            status = checkStatus
-
-    if status != 'NEEDED':
-        if opts.retry:
-            logging.info('Would skip %s, status is %s, but running in retry mode', action['name'], status)
-        else:
-            logging.info('Skipping step %s, status is %s', action['name'], status)
+        status = needAction(opts, action)
+        if status:
+            logging.info('skipping step %s, status is %s' % (action['name'], status))
             return
 
     # confirm with user
-    if (opts.retry or 'confirm' in action) and not getConfirmation(opts, action['desc']):
+    if 'confirm' in action and not getConfirmation(opts, action['desc']):
         writeFileMakeDir(STATUS_PATH_TEMPLATE % action['name'], 'UNWANTED')
         return
 
@@ -250,9 +224,10 @@ def doAction(opts, action):
 
 def doit(opts, args):
     os.chdir(opts.siteDir)
-    if not opts.retry and os.path.exists('build/management/bootstrap/bootstrapStatus.txt'):
+    if os.path.exists('build/management/bootstrap/bootstrapStatus.txt'):
         sys.exit(0)
-    print 'Bootstrapping...'
+    if not opts.puppet:
+        print 'bootstrapping...'
 
     logging.basicConfig(level=(logging.WARNING - opts.verbose * 10),
                         format='%(message)s')
@@ -260,25 +235,23 @@ def doit(opts, args):
     if args:
         for arg in args:
             if arg not in ACTION_DICT:
-                print >> sys.stderr, 'ERROR: there is no action %s' % arg
-                print >> sys.stderr, 'Available actions are: %s' % (' '.join([a['name'] for a in ACTIONS]))
+                print >>sys.stderr, 'ERROR: there is no action %s' % arg
+                print >>sys.stderr, 'available actions are: %s' % (' '.join([a['name'] for a in ACTIONS]))
                 sys.exit(1)
         actions = [ACTION_DICT[arg] for arg in args]
     else:
         actions = ACTIONS
 
-    logging.info('Working in %s', os.getcwd())
+    logging.info('working in %s' % os.getcwd())
     for action in actions:
         doAction(opts, action)
 
     # mark overall completion
     writeFileMakeDir(STATUS_PATH_TEMPLATE % 'bootstrap', 'DONE')
 
-    print '\nFinished bootstrapping\n'
-
-    sys.path.insert(0, os.path.dirname(opts.siteDir))
-    from georef.djangoWsgi import getEnvironmentFromSourceMe
-    getEnvironmentFromSourceMe()
+    if not opts.puppet:
+        print '\nnow "source sourceme.sh" before running manage.py again'
+    sys.exit(1)
 
 
 def main():
@@ -291,16 +264,12 @@ def main():
                       default=DEFAULT_SITE_DIR,
                       help='Site directory to work in [%default]')
     parser.add_option('-v', '--verbose',
-                      action='count', default=1,
-                      help='Increase verbosity, can specify multiple times')
-    parser.add_option('-q', '--quiet',
                       action='count', default=0,
-                      help='Decrease verbosity, can specify multiple times')
-    parser.add_option('-r', '--retry',
+                      help='Increase verbosity, can specify multiple times')
+    parser.add_option('-p', '--puppet',
                       action='store_true', default=False,
-                      help='Ask user if they want to re-run steps marked as done')
+                      help='Pass this when calling from puppet to disable exit printout')
     opts, args = parser.parse_args()
-    opts.verbose -= opts.quiet
     doit(opts, args)
 
 if __name__ == '__main__':

@@ -4,11 +4,8 @@
 # All Rights Reserved.
 # __END_LICENSE__
 
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
+from mapFastenApp import views
 
-urlpatterns = patterns(
-    'mapFastenApp.views',
-
-    url(r'^$', 'home',
-        {}, 'mapFasten_home'),
-)
+urlpatterns = [url(r'^$', views.home,
+        {}, 'mapFasten_home')]
