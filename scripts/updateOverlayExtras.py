@@ -16,9 +16,14 @@ def updateOverlayExtras():
 #             imageSize = 'large'
 #         else: 
 #             imageSize = 'small'
-        issMRF = overlay.name.split('.')[0]
-        if issMRF: 
-            overlay.extras.issMRF = issMRF
+
+        #already existing (get id from overlay name and put it into extras and imagedata)
+        if (hasattr(overlay.extras, 'issMRF') and (overlay.extras['issMRF'] is not None)):
+            overlay.imageData.issMRF = overlay.extras['issMRF']
+        else: 
+            overlay.imageData.issMRF = overlay.name.split('.')[0]    
+        overlay.imageData.save()
+        overlay.save()
 #             issMRF = issMRF.split('-')
 #             mission = issMRF[0]
 #             roll = issMRF[1]
@@ -38,5 +43,5 @@ def updateOverlayExtras():
 #             at = issImage.extras.acquisitionTime
 #             overlay.extras.acquisitionTime = at[:2] + ':' + ad[2:4] + ':' + ad[4:6] # convert HHMMSS to HH:MM:SS
 #             overlay.extras.focalLength_unitless = issImage.extras.focalLength_unitless
-            overlay.save()
+#             overlay.save()
 updateOverlayExtras()
