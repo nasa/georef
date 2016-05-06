@@ -69,15 +69,15 @@ def listUsedImages():
     for imdata_id in goodImageData:
         imageData = ImageData.objects.get(id=imdata_id)
         try: 
-            goodImages.append(imageData.image.name)
+            goodImages.append(imageData.image.name.split('/')[-1])
         except:
             pass
         try: 
-            goodImages.append(imageData.unenhancedImage.name)
+            goodImages.append(imageData.unenhancedImage.name.split('/')[-1])
         except:
             pass
         try: 
-            goodImages.append(imageData.unenhancedImage.name)
+            goodImages.append(imageData.unenhancedImage.name.split('/')[-1])
         except:
             pass
     return list(set(goodImages))
@@ -119,6 +119,7 @@ def cleanupImageFiles():
     print "good images are"
     print goodImages
     mypath = '/home/geocam/georef/data/geocamTiePoint/overlay_images'
+#     mypath = '/home/vagrant/gds/georef/data/geocamTiePoint/overlay_images'
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     for file in onlyfiles: 
         print "file name %s" % file
