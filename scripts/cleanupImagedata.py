@@ -142,7 +142,7 @@ def createRawImageData():
             oldImageData = overlay.imageData
             if oldImageData is None:
                 print "Error: overlay %d has no image data!" % overlay.pk
-                return 
+                continue 
             sizeType = None
             sizeType= None
             try: 
@@ -151,7 +151,7 @@ def createRawImageData():
                 else: 
                     sizeType = 'large'
             except:
-                return 
+                continue 
             issImage = ISSimage(mission, roll, frame, sizeType)
             imageUrl = issImage.imageUrl
             # get image data from url
