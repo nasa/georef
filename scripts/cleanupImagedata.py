@@ -131,7 +131,10 @@ def cleanupImageFiles():
 def createRawImageData():
     overlays = Overlay.objects.all()
     for overlay in overlays:
-        mission, roll, frame = overlay.name.split('.')[0].split('-')
+        try: 
+            mission, roll, frame = overlay.name.split('.')[0].split('-')
+        except:
+            continue
         raw = overlay.getRawImageData()
         if not raw:
             print "no raw imagedata exists for overlay %d" % overlay.pk 
