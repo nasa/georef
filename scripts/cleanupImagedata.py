@@ -126,6 +126,30 @@ def cleanupImageFiles():
         if file not in goodImages:
             print "%s deleted" % file
             os.remove(mypath + '/' + file)
+            
+
+def createRawImageData():
+    overlays = Overlay.objects.all()
+    for overlay in overlays:
+        mission, roll, frame = overlay.name.split('.')[0].split('-')
+        raw = overlay.getRawImageData()
+        if not raw:
+            print "no raw imagedata exists for overlay %d" % overlay.pk 
+            oldImageData = overlay.imageData
+            sizeType = None
+            if oldImageData.image.size < 600000:
+                sizeType = 'small'
+            else: 
+                sizeType = 'large'
+            issImage = ISSimage(mission, roll, frame, sizeType)
+            imageUrl = issImage.imageUrl
+            # get image data from url
+            imageFile = imageInfo.getImageFile(imageUrl)
+            rawImageData, imageSize = createImageData(imageFile)
+            print "new raw imagedata %d saved for overlay %d" % (rawImageData.id, overlay.pk)
+            rawImageData.overlay = overlay
+            rawImageData.save()
+
 
 
 def __main__():
@@ -136,6 +160,8 @@ def __main__():
         cleanupQuadTrees()
     elif arg1 == '3':
         cleanupImageFiles()
+    elif arg1 == '4':
+        createRawImageData()
     else:
         print "Wrong argument. Either needs to be 1 2 or 3"
         pass # do nothing
