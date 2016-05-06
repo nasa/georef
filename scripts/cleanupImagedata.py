@@ -139,10 +139,9 @@ def createRawImageData():
         if not raw:
             print "no raw imagedata exists for overlay %d" % overlay.pk 
             oldImageData = None
-            try: 
-                oldImageData = overlay.imageData
-            except: 
-                print "Error: overlay %d has no image data at all!" % overlay.pk
+            oldImageData = overlay.imageData
+            if oldImageData is None:
+                print "Error: overlay %d has no image data!" % overlay.pk
                 return 
             sizeType = None
             if oldImageData.image.size < 600000:
