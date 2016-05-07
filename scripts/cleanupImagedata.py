@@ -157,11 +157,12 @@ def createRawImageData():
             imageUrl = issImage.imageUrl
             # get image data from url
             imageFile = imageInfo.getImageFile(imageUrl)
-            if not checkIfErrorJSONResponse(imageFile):
-                rawImageData, imageSize = createImageData(imageFile)
-                print "new raw imagedata %d saved for overlay %d" % (rawImageData.id, overlay.pk)
-                rawImageData.overlay = overlay
-                rawImageData.save()
+            if checkIfErrorJSONResponse(imageFile):
+                continue
+            rawImageData, imageSize = createImageData(imageFile, True)
+            print "new raw imagedata %d saved for overlay %d" % (rawImageData.id, overlay.pk)
+            rawImageData.overlay = overlay
+            rawImageData.save()
 
 
 def __main__():
