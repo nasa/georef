@@ -4,6 +4,7 @@ django.setup()
 
 from geocamTiePoint.models import *
 from geocamUtil import imageInfo
+from geocamUtil.ErrorJSONResponse import ErrorJSONResponse, checkIfErrorJSONResponse
 from geocamTiePoint.viewHelpers import *
 from django.conf import settings
 
@@ -156,11 +157,11 @@ def createRawImageData():
             imageUrl = issImage.imageUrl
             # get image data from url
             imageFile = imageInfo.getImageFile(imageUrl)
-            rawImageData, imageSize = createImageData(imageFile)
-            print "new raw imagedata %d saved for overlay %d" % (rawImageData.id, overlay.pk)
-            rawImageData.overlay = overlay
-            rawImageData.save()
-
+            if not checkIfErrorJSONResponse(imageFile):
+                rawImageData, imageSize = createImageData(imageFile)
+                print "new raw imagedata %d saved for overlay %d" % (rawImageData.id, overlay.pk)
+                rawImageData.overlay = overlay
+                rawImageData.save()
 
 
 def __main__():
