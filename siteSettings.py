@@ -30,7 +30,7 @@ from django.core.urlresolvers import reverse
 # apps should be listed from "most specific" to "most general".  that
 # way, templates in more specific apps override ones from more general
 # apps.
-INSTALLED_APPS = ['mapFastenApp',
+INSTALLED_APPS = ['georefApp',
                   'geocamTiePoint',
                   'geocamUtil',
                   'georef_imageregistration',
@@ -148,7 +148,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(PROJ_ROOT, 'apps/mapFastenApp/templates'),
+            os.path.join(PROJ_ROOT, 'apps/georefApp/templates'),
             os.path.join(PROJ_ROOT, 'apps/geocamTiePoint/templates/'),
 
             # Templates for utility scripts

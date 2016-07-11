@@ -80,7 +80,7 @@ skip_files:
 - ^build/management/
 - ^build/bin/
 - /doc_src/
-- ^apps/mapFastenApp/static
+- ^apps/georefApp/static
 - ^submodules/geocamAppEngineLibs/staticfiles/tests
 - ^submodules/geocamAppEngineLibs/appconf/tests
 - ^submodules/geocamAppEngineLibs/tagging/tests
