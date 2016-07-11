@@ -5,7 +5,7 @@
 # __END_LICENSE__
 
 from django.conf.urls import url, include
-from mapFastenApp import views
+from georefApp import views
 
 urlpatterns = [url(r'^$', views.home,
-        {}, 'mapFasten_home')]
+        {}, 'georef_home')]
