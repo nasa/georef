@@ -21,3 +21,4 @@ apps/georef_imageregistration
 apps/georef_imageregistration/*
 submodules/georef_imageregistration
 submodules/georef_imageregistration/*
+database_backups/
