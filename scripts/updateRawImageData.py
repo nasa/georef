@@ -1,6 +1,8 @@
 import django
-from django.conf import settings
 django.setup()
+
+from django.conf import settings
+settings.configure()
 
 from geocamTiePoint.models import *
 from geocamTiePoint.viewHelpers import *
