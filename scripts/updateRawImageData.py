@@ -1,11 +1,32 @@
 import django
+from django.conf import settings
 django.setup()
 
-from django.conf import settings
-settings.configure()
-
 from geocamTiePoint.models import *
-from geocamTiePoint.viewHelpers import *
+DISPLAY = 2
+ENHANCED = 1 
+UNENHANCED = 0
+
+"""
+Image related stuff
+"""
+
+def getImage(imageData, flag):
+    """
+    Returns the PIL image object from imageData based on the flag.
+    """
+    image = None
+    try: 
+        if flag == ENHANCED:
+            image = PIL.Image.open(imageData.enhancedImage.file)
+        elif flag == UNENHANCED:
+            image = PIL.Image.open(imageData.unenhancedImage.file)
+        elif flag == DISPLAY:
+            image = PIL.Image.open(imageData.image.file)
+    except: 
+        logging.error("image cannot be read from the image data")
+        return None
+    return image
 
 def updateRawImageData():
     overlays = Overlay.objects.all()
