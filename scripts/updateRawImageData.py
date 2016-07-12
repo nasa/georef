@@ -42,7 +42,9 @@ def updateRawImageData():
                 rdata.width = size[0]
                 rdata.height = size[1]
                 imgSize = "large"
-                if width < 1200:
+                if rdata.width < 1200:
                     imgSize = "small"
                 rdata.sizeType = imgSize
             rdata.save() 
+
+updateRawImageData()
