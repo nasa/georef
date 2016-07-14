@@ -159,7 +159,7 @@ def createRawImageData():
             imageFile = imageInfo.getImageFile(imageUrl)
             if checkIfErrorJSONResponse(imageFile):
                 continue
-            rawImageData, imageSize = createImageData(imageFile, True)
+            rawImageData = createImageData(imageFile, True)
             print "new raw imagedata %d saved for overlay %d" % (rawImageData.id, overlay.pk)
             rawImageData.overlay = overlay
             rawImageData.save()
