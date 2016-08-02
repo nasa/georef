@@ -36,16 +36,20 @@ def createNewImageData():
                 continue
             # delete the old raw image data that has a bad file
             overlay.getRawImageData().delete()
+            
             # create a new one form the newly imnported image.
             rawImageData = createImageData(imageFile, sizeType)
             rawImageData.overlay = overlay
             rawImageData.save()
+            
+            # set the overlay and qt to this new raw image data.            
             if overlay.unalignedQuadTree.imageData is not None:
                 overlay.unalignedQuadTree.imageData.delete()
             overlay.unalignedQuadTree.imageData = rawImageData
             if overlay.alignedQuadTree.imageData is not None:
                 overlay.alignedQuadTree.imageData.delete()
             overlay.alignedQuadTree.imageData = rawImageData
+            overlay.imageData = overlay.rawImageData
             overlay.save()
 
 createNewImageData()
