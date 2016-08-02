@@ -53,33 +53,33 @@ def createMetaDataFile(overlay):
 
 
 def createDataProducts(opts):   
-    interval = int(opts.seconds)
-#     while True:
-#         time.sleep(interval)
     '''
     Create exports for manually generated images.
     '''
-    overlays = Overlay.objects.all()
-    for overlay in overlays:
-        if ('transform' in overlay.extras):
-            if overlay.readyToExport:
-                # check if the output exists already
-                alignedQT = overlay.alignedQuadTree
-                if alignedQT: 
-                    if bool(alignedQT.htmlExport) is False:
-                        overlay.generateHtmlExport()
+    interval = int(opts.seconds)
+    while True:
+        time.sleep(interval)
+        overlays = Overlay.objects.all()
+        for overlay in overlays:
+            if ('transform' in overlay.extras):
+                if overlay.readyToExport:
+                    # check if the output exists already
+                    alignedQT = overlay.alignedQuadTree
+                    if alignedQT: 
+                        if bool(alignedQT.htmlExport) is False:
+                            overlay.generateHtmlExport()
+                        
+                        if bool(alignedQT.geotiffExport) is False:
+                            overlay.generateGeotiffExport()
+                        # note: kml export depends on existence of geotiff export.
+                        if bool(alignedQT.kmlExport) is False:
+                            overlay.generateKmlExport()
                     
-                    if bool(alignedQT.geotiffExport) is False:
-                        overlay.generateGeotiffExport()
-                    # note: kml export depends on existence of geotiff export.
-                    if bool(alignedQT.kmlExport) is False:
-                        overlay.generateKmlExport()
-                
-                    if alignedQT.metadataExportName is None:
-                        try: 
-                            createMetaDataFile(overlay)
-                        except: 
-                            continue
+                        if alignedQT.metadataExportName is None:
+                            try: 
+                                createMetaDataFile(overlay)
+                            except: 
+                                continue
     
 
 def main():
