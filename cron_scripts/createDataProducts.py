@@ -62,38 +62,38 @@ def createDataProducts(opts):
     '''
     Create exports for manually generated images.
     '''
-    interval = int(opts.seconds)
-    while True:
-        time.sleep(interval)
-        overlays = Overlay.objects.all()
-        for overlay in overlays:
-            if ('transform' in overlay.extras) and (len(overlay.extras.points) > 2):
-                if overlay.readyToExport:
-                    # check if the output exists already
-                    alignedQT = overlay.alignedQuadTree
-                    try:  # handle the case where the image is missing from the imagedata in alignedQuadTree.
-                        imageFile = overlay.alignedQuadTree.imageData.image.file
+#     interval = int(opts.seconds)
+#     while True:
+#         time.sleep(interval)
+    overlays = Overlay.objects.all()
+    for overlay in overlays:
+        if ('transform' in overlay.extras) and (len(overlay.extras.points) > 2):
+            if overlay.readyToExport:
+                # check if the output exists already
+                alignedQT = overlay.alignedQuadTree
+                try:  # handle the case where the image is missing from the imagedata in alignedQuadTree.
+                    imageFile = overlay.alignedQuadTree.imageData.image.file
+                except: 
+                    try:
+                        overlay.alignedQuadTree.imageData = overlay.getRawImageData()
+                        overlay.alignedQuadTree.save()
                     except: 
-                        try:
-                            overlay.alignedQuadTree.imageData = overlay.getRawImageData()
-                            overlay.alignedQuadTree.save()
+                        continue
+                if alignedQT: 
+                    if bool(alignedQT.htmlExport) is False:
+                        overlay.generateHtmlExport()
+                    
+                    if bool(alignedQT.geotiffExport) is False:
+                        overlay.generateGeotiffExport()
+                    # note: kml export depends on existence of geotiff export.
+                    if bool(alignedQT.kmlExport) is False:
+                        overlay.generateKmlExport()
+                
+                    if alignedQT.metadataExportName is None:
+                        try: 
+                            createMetaDataFile(overlay)
                         except: 
                             continue
-                    if alignedQT: 
-                        if bool(alignedQT.htmlExport) is False:
-                            overlay.generateHtmlExport()
-                        
-                        if bool(alignedQT.geotiffExport) is False:
-                            overlay.generateGeotiffExport()
-                        # note: kml export depends on existence of geotiff export.
-                        if bool(alignedQT.kmlExport) is False:
-                            overlay.generateKmlExport()
-                    
-                        if alignedQT.metadataExportName is None:
-                            try: 
-                                createMetaDataFile(overlay)
-                            except: 
-                                continue
 
 def main():
     import optparse
