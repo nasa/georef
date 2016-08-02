@@ -35,7 +35,8 @@ def createNewImageData():
             if checkIfErrorJSONResponse(imageFile):
                 continue
             # delete the old raw image data that has a bad file
-            overlay.getRawImageData().delete()
+            if overlay.getRawImageData():
+                overlay.getRawImageData().delete()
             
             # create a new one form the newly imnported image.
             rawImageData = createImageData(imageFile, sizeType)
