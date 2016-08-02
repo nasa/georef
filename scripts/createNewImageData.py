@@ -53,7 +53,7 @@ def createNewImageData():
                     overlay.alignedQuadTree.imageData.delete()
                 overlay.alignedQuadTree.imageData = rawImageData
                 overlay.alignedQuadTree.save()
-            overlay.imageData = overlay.rawImageData
+            overlay.imageData = rawImageData
             overlay.save()
 
 createNewImageData()
