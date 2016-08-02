@@ -74,8 +74,11 @@ def createDataProducts(opts):
                     try:  # handle the case where the image is missing from the imagedata in alignedQuadTree.
                         imageFile = overlay.alignedQuadTree.imageData.image.file
                     except: 
-                        overlay.alignedQuadTree.imageData = getRawImageData()
-                        overlay.alignedQuadTree.save()
+                        try:
+                            overlay.alignedQuadTree.imageData = overlay.getRawImageData()
+                            overlay.alignedQuadTree.save()
+                        except: 
+                            continue
                     if alignedQT: 
                         if bool(alignedQT.htmlExport) is False:
                             overlay.generateHtmlExport()
