@@ -14,6 +14,12 @@ from georef_imageregistration import offline_config, output_generator, registrat
 from geocamTiePoint import quadTree
 
 
+"""
+This script only works for manually generated images. It creates the metadata file, and the data products
+for the ones that were manually registered in GeoRef. 
+TODO: write a script for auto-generated images.
+"""
+
 def createMetaDataFile(overlay):                    
     """
     Creates the metadata file using Scott's code, and returns the full path of the tar file. 
@@ -65,6 +71,11 @@ def createDataProducts(opts):
                 if overlay.readyToExport:
                     # check if the output exists already
                     alignedQT = overlay.alignedQuadTree
+                    try:  # handle the case where the image is missing from the imagedata in alignedQuadTree.
+                        imageFile = overlay.alignedQuadTree.imageData.image.file
+                    except: 
+                        overlay.alignedQuadTree.imageData = getRawImageData()
+                        overlay.alignedQuadTree.save()
                     if alignedQT: 
                         if bool(alignedQT.htmlExport) is False:
                             overlay.generateHtmlExport()
@@ -80,7 +91,6 @@ def createDataProducts(opts):
                                 createMetaDataFile(overlay)
                             except: 
                                 continue
-    
 
 def main():
     import optparse
