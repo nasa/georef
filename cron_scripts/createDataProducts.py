@@ -61,7 +61,7 @@ def createDataProducts(opts):
         time.sleep(interval)
         overlays = Overlay.objects.all()
         for overlay in overlays:
-            if ('transform' in overlay.extras):
+            if ('transform' in overlay.extras) and (len(overlay.extras.points) > 2):
                 if overlay.readyToExport:
                     # check if the output exists already
                     alignedQT = overlay.alignedQuadTree
