@@ -42,13 +42,17 @@ def createNewImageData():
             rawImageData.overlay = overlay
             rawImageData.save()
             
-            # set the overlay and qt to this new raw image data.            
-            if overlay.unalignedQuadTree.imageData is not None:
-                overlay.unalignedQuadTree.imageData.delete()
-            overlay.unalignedQuadTree.imageData = rawImageData
-            if overlay.alignedQuadTree.imageData is not None:
-                overlay.alignedQuadTree.imageData.delete()
-            overlay.alignedQuadTree.imageData = rawImageData
+            # set the overlay and qt to this new raw image data.  
+            if overlay.unalignedQuadTree:
+                if overlay.unalignedQuadTree.imageData is not None:
+                    overlay.unalignedQuadTree.imageData.delete()
+                overlay.unalignedQuadTree.imageData = rawImageData
+                overlay.unalignedQuadTree.save()
+            if overlay.alignedQuadTree:
+                if overlay.alignedQuadTree.imageData is not None:
+                    overlay.alignedQuadTree.imageData.delete()
+                overlay.alignedQuadTree.imageData = rawImageData
+                overlay.alignedQuadTree.save()
             overlay.imageData = overlay.rawImageData
             overlay.save()
 
