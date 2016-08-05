@@ -34,6 +34,7 @@ INSTALLED_APPS = ['georefApp',
                   'geocamTiePoint',
                   'geocamUtil',
                   'georef_imageregistration',
+                  'geocamPycroraptor2',
 
                   'django.contrib.admin',
                   'django.contrib.auth',
