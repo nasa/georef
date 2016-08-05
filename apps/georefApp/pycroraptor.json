@@ -1,0 +1,27 @@
+{
+    "PORTS": "/home/vagrant/georef/apps/georefApp/ports.json",
+    "LOG_DIR": "/tmp/pyraptord/logs",
+
+    "SERVICES": {
+        "bc": {
+            "command": "bc -i"
+        },
+        "nohup": {
+            "command": "nohup cat"
+        },
+        "source": {
+            "command": "./numberSource.py",
+            "stdout": "/tmp/myfifo"
+        },
+        "sink": {
+            "command": "./numberSink.py",
+            "stdin": "/tmp/myfifo"
+        },
+        "sleep": {
+            "command": "/bin/sleep 10000"
+        }
+    },
+    "GROUPS": {
+        "startup": ["bc", "nohup"]
+    }
+}
