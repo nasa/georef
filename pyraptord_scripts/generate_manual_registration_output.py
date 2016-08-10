@@ -31,7 +31,7 @@ def createMetaDataFile(overlay):
     centerPointSource = None
     logging.info("inside createMetaDataFile")
     try: 
-        successFrames, centerPointSource = output_generator.runOutputGenerator(mission, roll, frame, limit, autoOnly, manualOnly)
+        successFrames, centerPointSources = output_generator.runOutputGenerator(mission, roll, frame, limit, autoOnly, manualOnly)
     except Exception as e:
         raise Exception('Exception in runOutputGenerator script') 
         return
