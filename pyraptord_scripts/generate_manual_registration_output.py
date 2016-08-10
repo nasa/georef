@@ -14,6 +14,8 @@ from geocamTiePoint.models import *
 from georef_imageregistration import offline_config, output_generator, registration_common, georefDbWrapper
 from geocamTiePoint import quadTree
 
+
+
 def createMetaDataFile(overlay):                    
     """
     Creates the metadata file using Scott's code, and returns the full path of the tar file. 
@@ -26,10 +28,11 @@ def createMetaDataFile(overlay):
     autoOnly = False
     manualOnly = True
     successFrames = []
+    centerPointSource = None
     logging.info("inside createMetaDataFile")
     try: 
-        successFrames = output_generator.runOutputGenerator(mission, roll, frame, limit, autoOnly, manualOnly)
-    except: 
+        successFrames, centerPointSource = output_generator.runOutputGenerator(mission, roll, frame, limit, autoOnly, manualOnly)
+    except Exception as e:
         raise Exception('Exception in runOutputGenerator script') 
         return
 
@@ -41,6 +44,7 @@ def createMetaDataFile(overlay):
         timenow = datetime.datetime.utcnow()
         zipFileName = issMRF + '_manual_' + timenow.strftime('%Y-%m-%d-%H%M%S-UTC') + '.zip'
         zipFilePath = zipFileDir + '/' + zipFileName
+        
         writer = quadTree.ZipWriter(sourceFilesDir, zipFilePath)
         frame = issMRF.split('-')[2]
         centerPointSource = georefDbWrapper.MANUAL
@@ -50,7 +54,7 @@ def createMetaDataFile(overlay):
         alignedQT.metadataExportName = zipFileName
         alignedQT.save()
         
-        overlay.writtenToFile = datetime.datetime.utcnow()
+        overlay.writtenToFile = True
         overlay.save()
         logging.info("overlay is saved.")
         

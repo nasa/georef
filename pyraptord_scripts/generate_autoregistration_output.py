@@ -1,10 +1,13 @@
 #!/usr/bin/env python
+
+import datetime
+
 import django
 from django.conf import settings
 django.setup()
 
-from georef_imageregistration import output_generator
-
+from georef_imageregistration import output_generator, registration_common
+from geocamTiePoint import quadTree
 
 def generateAutoregistrationOutput():
     """
@@ -16,12 +19,19 @@ def generateAutoregistrationOutput():
     limit = 0
     autoOnly = True 
     manualOnly = False
-    successFrames = output_generator.runOutputGenerator(mission, roll, frame, limit, autoOnly, manualOnly)
+    successFrames, centerPointSource = output_generator.runOutputGenerator(mission, roll, frame, limit, autoOnly, manualOnly)
 
-#     # zip up the processed files
-#     for frame in successFrames:
-#         [(u'ISS039', u'E', u'12427')]
+    for mrf in successFrames:
+        mission, roll, frame = mrf
+        timenow = datetime.datetime.utcnow()
+        # define the path where zipfile will be saved
+        zipFileName = mission + '-' + roll + '-' + frame + '_' + centerPointSource + '_' + timenow.strftime('%Y-%m-%d-%H%M%S-UTC') + '.zip'
+        zipFileDir = registration_common.getZipFilePath(mission, roll, frame)
+        zipFilePath = zipFileDir + '/' + zipFileName 
+        # geotiff images and metadata files to be zipped
+        sourceFilesDir = registration_common.getWorkingDir(mission, roll, frame)
         
-    
+        writer = quadTree.ZipWriter(sourceFilesDir, zipFilePath)
+        writer.addDir(frame, centerPointSource)
 
 generateAutoregistrationOutput()
