@@ -5,9 +5,12 @@
     "SERVICES": {
         "generateManualRegistrationOutput": {
             "command": "/home/vagrant/gds/georef/pyraptord_scripts/generate_manual_registration_output.py"
+        }, 
+        "autoregister": {
+        	"command": "/home/vagrant/gds/georef/pyraptord_scripts/autoregister.py"
         } 
     },
     "GROUPS": {
-        "startup": ["generateManualRegistrationOutput"]
+        "startup": ["generateManualRegistrationOutput", "autoregister"]
     }
 }
