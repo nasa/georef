@@ -10,3 +10,7 @@
 [submodule "submodules/georef_imageregistration"]
 	path = submodules/georef_imageregistration
 	url = https://babelfish.arc.nasa.gov/git/georef_imageregistration
+[submodule "submodules/geocamPycroraptor2"]
+	path = submodules/geocamPycroraptor2
+	url = https://github.com/geocam/geocamPycroraptor2.git
+
