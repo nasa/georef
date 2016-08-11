@@ -1,13 +1,19 @@
 {
-    "PORTS": "/home/vagrant/georef/apps/georefApp/ports.json",
+    "PORTS": "/home/geocam/georef/apps/georefApp/ports.json",
     "LOG_DIR": "/tmp/pyraptord/logs",
 
     "SERVICES": {
         "generateManualRegistrationOutput": {
-            "command": "/home/vagrant/gds/georef/pyraptord_scripts/generate_manual_registration_output.py"
+            "command": "/home/geocam/georef/pyraptord_scripts/generate_manual_registration_output.py"
+        }, 
+        "autoregister": {
+        	"command": "/home/geocam/georef/pyraptord_scripts/autoregister.py"
         },
+        "generateAutoRegistrationOutput" : {
+        	"command": "/home/geocam/georef/pyraptord_scripts/generate_autoregistration_output.py"
+        }
     },
     "GROUPS": {
-        "startup": ["generateManualRegistrationOutput"]
+        "startup": ["generateManualRegistrationOutput", "autoregister", "generateAutoRegistrationOutput"]
     }
 }

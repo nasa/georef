@@ -13,4 +13,4 @@ CONFIG_DIR=${PROJ_DIR}/apps/georefApp
 
 source ${PROJ_DIR}/sourceme.sh
 cd ${CONFIG_DIR}
-exec /sbin/start-stop-daemon --chuid vagrant --group vagrant --exec ${PYRAPTORD} --start -- -c ${CONFIG_DIR}/pycroraptor.json $*
+exec /sbin/start-stop-daemon --chuid geocam --group geocam --exec ${PYRAPTORD} --start -- -c ${CONFIG_DIR}/pycroraptor.json $*
