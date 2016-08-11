@@ -9,7 +9,8 @@ django.setup()
 from georef_imageregistration import output_generator, registration_common
 from geocamTiePoint import quadTree
 
-def generateAutoregistrationOutput():
+
+def generateAutoregistrationOutput(opts):
     """
     Runs the registration_processor in georef_imageregistration app.
     """
@@ -19,22 +20,27 @@ def generateAutoregistrationOutput():
     limit = 0
     autoOnly = True 
     manualOnly = False
-    successFrames, centerPointSources = output_generator.runOutputGenerator(mission, roll, frame, limit, autoOnly, manualOnly)
+    sleepInterval = opts.sleepInterval
+    
+    output_generator.runOutputGenerator(mission, 
+                                        roll, 
+                                        frame, 
+                                        limit, 
+                                        autoOnly, 
+                                        manualOnly,
+                                        sleepInterval)
 
-    index = 0
-    for mrf in successFrames:
-        mission, roll, frame = mrf
-        timenow = datetime.datetime.utcnow()
-        centerPointSource = centerPointSources[index]
-        # define the path where zipfile will be saved
-        zipFileName = mission + '-' + roll + '-' + frame + '_' + centerPointSource + '_' + timenow.strftime('%Y-%m-%d-%H%M%S-UTC') + '.zip'
-        zipFileDir = registration_common.getZipFilePath(mission, roll, frame)
-        zipFilePath = zipFileDir + '/' + zipFileName 
-        # geotiff images and metadata files to be zipped
-        sourceFilesDir = registration_common.getWorkingDir(mission, roll, frame)
-        
-        writer = quadTree.ZipWriter(sourceFilesDir, zipFilePath)
-        writer.addDir(frame, centerPointSource)
-        index = index + 1
 
-generateAutoregistrationOutput()
+def main():
+    import optparse
+    seconds = 30 * 60  # sleep for 30 minutes and try again
+    parser = optparse.OptionParser('usage:%prog')
+    parser.add_option('-s', '--sleepInterval',
+                      default= seconds,
+                      help='sleep interval in seconds')
+    opts, _args = parser.parse_args()
+    generateAutoregistrationOutput(opts)
+
+
+if __name__ == '__main__':
+    main()

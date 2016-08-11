@@ -8,9 +8,12 @@
         }, 
         "autoregister": {
         	"command": "/home/vagrant/gds/georef/pyraptord_scripts/autoregister.py"
-        } 
+        },
+        "generateAutoRegistrationOutput" : {
+        	"command": "/home/vagrant/gds/georef/pyraptord_scripts/generate_autoregistration_output.py"
+        }
     },
     "GROUPS": {
-        "startup": ["generateManualRegistrationOutput", "autoregister"]
+        "startup": ["generateManualRegistrationOutput", "autoregister", "generateAutoRegistrationOutput"]
     }
 }
