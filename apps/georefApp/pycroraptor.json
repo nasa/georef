@@ -1,16 +1,16 @@
 {
-    "PORTS": "/home/vagrant/georef/apps/georefApp/ports.json",
+    "PORTS": "/home/geocam/georef/apps/georefApp/ports.json",
     "LOG_DIR": "/tmp/pyraptord/logs",
 
     "SERVICES": {
         "generateManualRegistrationOutput": {
-            "command": "/home/vagrant/georef/apps/georef_imageregistration/output_generator.py --manual-only True --sleepInterval 1800"
+            "command": "/home/geocam/georef/apps/georef_imageregistration/output_generator.py --manual-only True --sleepInterval 1800"
         }, 
         "autoregister": {
-        	"command": "/home/vagrant/georef/apps/georef_imageregistration/registration_processor.py --mission ISS042"
+        	"command": "/home/geocam/georef/apps/georef_imageregistration/registration_processor.py --mission ISS042"
         },
         "generateAutoRegistrationOutput" : {
-        	"command": "/home/vagrant/georef/apps/georef_imageregistration/output_generator.py --auto-only True --sleepInterval 1800"
+        	"command": "/home/geocam/georef/apps/georef_imageregistration/output_generator.py --auto-only True --sleepInterval 1800"
         }
     },
     "GROUPS": {
