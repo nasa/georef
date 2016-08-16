@@ -4,13 +4,13 @@
 
     "SERVICES": {
         "generateManualRegistrationOutput": {
-            "command": "/home/geocam/georef/pyraptord_scripts/generate_manual_registration_output.py"
+            "command": "/home/geocam/georef/apps/georef_imageregistration/output_generator.py --manual-only True --sleepInterval 1800"
         }, 
         "autoregister": {
-        	"command": "/home/geocam/georef/pyraptord_scripts/autoregister.py"
+        	"command": "/home/geocam/georef/apps/georef_imageregistration/registration_processor.py --mission ISS042"
         },
         "generateAutoRegistrationOutput" : {
-        	"command": "/home/geocam/georef/pyraptord_scripts/generate_autoregistration_output.py"
+        	"command": "/home/geocam/georef/apps/georef_imageregistration/output_generator.py --auto-only True --sleepInterval 1800"
         }
     },
     "GROUPS": {

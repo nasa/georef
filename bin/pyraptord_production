@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# This script is designed to be run under Ubuntu Upstart in a Vagrant
+# VM.  Upstart will be running as user root, so we specify --chuid
+# vagrant to set the user pyraptord will run as. We use the
+# start-stop-daemon command, which is available in Ubuntu but might not
+# be in RHEL (?).
+
+THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJ_DIR=${THIS_DIR}/..
+PYRAPTORD=${PROJ_DIR}/apps/geocamPycroraptor2/bin/pyraptord.py
+CONFIG_DIR=${PROJ_DIR}/apps/georefApp
+
+source ${PROJ_DIR}/sourceme.sh
+cd ${CONFIG_DIR}
+exec /sbin/start-stop-daemon --chuid geocam --group geocam --exec ${PYRAPTORD} --start -- -c ${CONFIG_DIR}/pycroraptor.json $*
