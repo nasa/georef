@@ -1,0 +1,34 @@
+/* sizes */
+#main-wrap > div { min-height: 450px; }
+
+
+/*#header,
+#footer {
+    min-height: 40px;
+    }*/
+
+    #allWrap {
+    	overflow: hidden;
+    }
+
+    #leftWrap {
+    	float: left;
+    	width: 70%;
+    }
+
+
+    #rightWrap {
+    	float: right;
+    	width: 30%;
+    	padding-top: 10%;
+    }   
+
+    #menuButtons {
+    	/*text-align: center;*/
+    	/*width: 50%;
+    	margin: 0 auto;*/
+    }
+
+    #menuButtons button {
+      /* Make buttons look nicer*/
+    }

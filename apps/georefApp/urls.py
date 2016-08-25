@@ -7,5 +7,5 @@
 from django.conf.urls import url, include
 from georefApp import views
 
-urlpatterns = [url(r'^$', views.home,
-        {}, 'georef_home')]
+urlpatterns = [url(r'^$', views.home, {}, 'georef_home'), 
+               url(r'^georefV2demo/$', views.osdDemoPage, {}, 'georef_osd_demo')] 
