@@ -11,3 +11,9 @@ from django.template import RequestContext
 def home(request):
     return render_to_response('georef/home.html',
                               RequestContext(request,{}))
+    
+    
+def osdDemoPage(request):
+    return render_to_response('georef/osd_sandbox.html',
+                              RequestContext(request,{}))
+    
