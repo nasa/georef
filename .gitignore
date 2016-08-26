@@ -23,5 +23,5 @@ submodules/georef_imageregistration
 submodules/georef_imageregistration/*
 database_backups/
 db.sqlt
-osd_sandbox*
+osd_sandbox_william_lee/*
 

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>GeoRef Window #2</title>
+</head>
+<body>
+	<div id="allWrap">
+		<div id="rightWrap">
+			<p1>Image Manipulation Tools</p1>			
+		</br> </br>
+		<div id="menuButtons">
+			<button type="button" id="tagpoint">Add Tagpoint</button>
+			<button type="button" id="deleteTagpoint">Delete Selected Tagpoints(s)</button>
+			<button type="button" id="undoDelete">Undo Deletion</button>
+		</br><p1> Adjust the image Brightness </p1>
+		<div id="brightnessFilter" style="width:300px"></div>
+	</br><p1> Adjust the image Contrast </p1>
+	<div id="contrastFilter" style="width:300px"></div>
+</br> </br>
+</div>
+<div id="tagpointList"></div>
+</div>
+<div id="leftWrap">
+	<h1>GeoRef Window #2 OpenSeaDragon Beta</h1>
+	<div id="slider" style="width:800px"></div>
+	<div id="openseadragon1" style="width: 800px; height: 600px;"></div>
+	<script src="../static/georef/js/openseadragon/openseadragon.min.js"></script>
+	<script src="../static/georef/js/openseadragon-filtering.js"></script>
+	<link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../static/georef/css/osd_style.css">
+	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script type="text/javascript">
+			/*
+		TODO: 
+			5.) Nicer buttons
+			6.) Implement keyboard shortcuts? 
+			7.) De-comment the add tagpoint button 
+			8.) store imgpoint + other viewport coordinate in tagpoint objects rather than calculating them on the fly? 
+			9.) Move all js to separate js file and include it? 
+			*/
+			
+			//Create OpenSeadragon viewer
+			
+			var viewer = OpenSeadragon({
+				id:            "openseadragon1",
+				prefixUrl:     "../static/georef/js/openseadragon/images/",
+				showNavigator: true,
+				gestureSettingsMouse:   {
+					clickToZoom: false
+				},
+				clickToZoom: "false",
+				tileSources:   [{ 
+					Image:  {
+						//Need to change [tile_format="jpg", image_quality=0.85,] 
+						//Plus any other changes in deepzoom.py we make						
+						xmlns: "http://schemas.microsoft.com/deepzoom/2009",
+						Url: "../static/georef/js/openseadragon/spacePics/ISS044-E-1998_files/",
+						TileSize: "128", 
+						Overlap: "2", 
+						Format: "png", 
+						ServerFormat: "Default",
+						Size: { 
+							Width: "4928",
+							Height: "3280",
+						}
+					}
+				}],
+			});
+/* 			//load the OSD image filtering plugin (javascript file)
+			$.getScript('openseadragon-filtering.js', function() {
+
+			}) */
+
+			//JQuery slider to set rotation: Onslide set viewer rotatoin to ui.value
+			$("#slider").slider({
+				min: -180,
+				max: 180,
+				slide: function(event, ui) {
+					viewer.viewport.setRotation(ui.value);					
+				}		
+			});
+
+			/*tagpointObjects:  An array of tagpoint objects (with queue behavior, push and pop)  
+
+						Each TagpointObject has:
+								-imgPoint: Stores the image pixel coordinate of the tagpoint
+								-deleted: Stores a boolean value (or a binary value of 0 or 1). If 1, the tagpoint has been "deleted" and is not redrawn if 1, the tagpoint has NOT been "deleted" and is not redrawn. "deleted" in quotes to emphasize that we never actually delete a 	tagpoint from the array -- we just don't draw it if deleted==1. This makes it easier to implement undo functionality while preserving the original ordering of the tagpoints (especially if multiple tagpoints are deleted and readded)	
+
+				addTagPointOnClick: Set true if "Add Tagpoint" button is clicked. (Useful to distinguish click to drag vs click to add tagpoint)
+				deletedIndices: Store indices of tagpoints that have been deleted */
+
+				var tagpointObjects = new Array();									
+				var addTagPointOnClick = true;
+				var deletedIndices = new Array();
+
+
+				/*"Add tagpoint" button. Sets "addTagPointOnClick" to true, which means the next click on canvas will add a tagpoint (versus other clicks which may be just clicking to drag/navigate around, in which case we do not wand to add a new tagpoint on click) */
+				$("#rightWrap").on("click", "#tagpoint", function(){
+					addTagPointOnClick=true;
+					document.getElementById("leftWrap").style.cursor="pointer";
+				})
+
+		//imageFilters stores the current values of the filters
+		var imageFilters = {}; 
+		//set the default level for the brightness and contrast filters
+		imageFilters["brightness"] = 0;
+		imageFilters["contrast"] = 0;
+
+		//Brightness filter slider. Store new brightness level in imageFilters[] as set by slider. Then, call updateBrightnessFilter()
+		$("#brightnessFilter").slider({
+			min: -100,
+			max: 100,
+			step: 25,			
+			slide: function(event, ui) {
+				imageFilters["brightness"] = ui.value;
+				console.log(imageFilters["brightness"]);
+				updateBrightnessFilter();
+			}		
+		})
+
+		//Contrast filter slider. Store new contrast level in imageFilters[] as set by slider. Then, call updateContrastFilter()
+		$("#contrastFilter").slider({
+			//Using range -1.5 to 1.5 rather than 0 to 3 so the slider starts in the center
+			min: -2,
+			max: 2,
+			step: 0.25,
+			//change to stop?
+			slide: function(event, ui) {
+				imageFilters["contrast"] = (ui.value/2.0)+1.0;	
+				console.log(imageFilters["contrast"]);			
+				updateContrastFilter();
+			}
+		})
+
+		
+		//updates the Brightness Filter to the value stored in the imageFilters array. Adds the brightness filter synchronously on top of existing filters. 
+		function updateBrightnessFilter() {			
+			viewer.setFilterOptions({
+				filters: {
+					processors: [					
+					OpenSeadragon.Filters.BRIGHTNESS(imageFilters["brightness"]),					
+					]
+				},
+				loadMode: 'sync'
+			})
+		}
+
+		//updates the Contrast Filter to the value stored in the imageFilters array. Adds the contrast filter synchronously on top of existing filters. 
+		function updateContrastFilter() {			
+			viewer.setFilterOptions({
+				filters: {
+					processors: [					
+					OpenSeadragon.Filters.CONTRAST(imageFilters["contrast"]),					
+					]
+				},
+				loadMode: 'sync'
+			})
+		}
+		
+		//"Delete selected tagpoints" button
+		$("#deleteTagpoint").click(function(){
+			deleteTagpoint();
+		})
+
+		
+
+		/*deleteTagpoint() 
+		Description
+				Called when someone deletes a tagpoint. 
+				If a tagpoint is checked/selected for deletion, set that specific tagpoint object's "deleted" field to "1"
+				(Later when we draw tagpoints, we only display tagpoints with "deleted" field of value "0" (i.e. not deleted))
+
+		Variables
+				index: 	   	     stores the current iteration of the loop we are on							
+				checked:    	 a indicator variable that remains false if no tagpoints have been selected for deletion, true if one/any have been 				 selected for deletion
+				deletedIndices:  stores the indices of tagpoints that have been deleted (deleted=1)
+				*/
+
+				function deleteTagpoint() {
+					var index=0;										
+					var checked=false;
+					$(".tagpoint").each(function(obj){
+				//need a better name than "thisObject". Why does assigning to a variable work, but $(this) not work independently? strange.
+				var thisObject = $(this);
+				if(thisObject.is(":checked")) {
+					checked=true;					
+					tagpointObjects[index].deleted=1;
+					deletedIndices.push(index);
+				}
+				index++
+			})
+					if(!checked) {
+						alert("Please select which tagpoints you would like to delete!");
+						return;
+					}else{						
+						$(".tagpointText").remove(); 
+						$("#tagpointList").html("");
+						viewer.clearOverlays();			
+					}
+					redrawText();
+					redrawTagpoints();
+				}
+		/*
+		Summary: Undoes the deletion of tagpoint(s). 
+		
+		First, checks if any indices have been deleted by checking the length of deletedIndices
+		If a tagpoint has been deleted, we call undoTagpointDeletion to undo the deletion
+		*/
+		$("#undoDelete").click(function(){
+			if(deletedIndices.length==0) {
+				alert("There are no deleted tagpoints to undo!");
+			}
+			undoTagpointDeletion();
+		})
+
+		/*
+		undoTagpoinDeletion(): Pops the last element from deletedIndices (which is the tagpoint we want to readd) and sets that tagpoint's "deleted" value to "0" so that it will be displayed when we redrawTagpoints();
+		*/
+		function undoTagpointDeletion() {		
+			var addIndex = deletedIndices.pop();
+			tagpointObjects[addIndex].deleted=0;
+			$("#tagpointList").html("");
+
+			//update the tagpoints and tagpoint list
+			redrawText();			
+			redrawTagpoints();
+		}
+
+		//Redraws the tagpoint list 
+		function redrawText() {
+			for(i=0; i<tagpointObjects.length;i++) {		
+				$("#tagpointList").append("<span class='tagpointText'> <input type='checkbox' class='tagpoint'/> </span>");
+				var tn = i+1;
+				$("#tagpointList").append("<span class='tagpointText'> <p1> Tagpoint #" + i +/*tn +*/ " is at      " + tagpointObjects[i].imgPoint + "</p1></span></br>");	
+			}
+		}
+		
+		/*
+		Redraw tagpoints on the image
+
+		Summary: 
+			1.) Clear all the overlays (tagpoints + tagpoint text) from the OSD canvas
+			2.) Iterate through all tagpoints that should be displayed (i.e. deleted=0). Maintain "displayIndex" as the *displayed* index of each tagpoint, incrementing "displayIndex" whenever we come across a tagpoint that is displayed on canvas. 
+			*/
+			function redrawTagpoints() {
+				viewer.clearOverlays();		
+				var displayIndex = 0;
+				for(i=0; i<tagpointObjects.length; i++) {
+					console.log("display index: " + displayIndex);
+					if (tagpointObjects[i].deleted==0) { 
+						var img = document.createElement("img");
+						var tagpointNumberText=document.createElement("p1");
+						img.src = "../static/georef/js/openseadragon/images/marker.png";
+						tagpointNumberText.innerHTML=(displayIndex);
+						/*
+						add an overlay to OSD canvas. The "placement" field determines where -- relative to the imgPoint -- to place the overlay
+						
+						For example, if placement is 'BOTTOM', the overlay will be drawn so the midpoint of the bottom of the image is centered on the img point
+
+						If placement is 'TOP', the overlay will be drawn so the midpoint of the top of the image is center on the img point.
+
+						"rotationMode: No_ROTATION" determines whether the tagpoint rotates so it is always oriented upwards relative to the screen (otherwise it will maintain its original orientation relative to the image. 
+						*/
+						viewer.addOverlay({
+							element: img,
+							location: viewer.viewport.imageToViewportCoordinates(tagpointObjects[i].imgPoint),
+							rotationMode: OpenSeadragon.OverlayRotationMode.NO_ROTATION,
+							placement: 'BOTTOM'
+						});
+						viewer.addOverlay({
+							element: tagpointNumberText, 
+							location: viewer.viewport.imageToViewportCoordinates(tagpointObjects[i].imgPoint),
+							rotationMode: OpenSeadragon.OverlayRotationMode.NO_ROTATION,
+							placement: 'TOP'
+						});
+						displayIndex++;
+					}else{
+					//tagpoint was deleted, don't display it
+				}
+				
+			}
+		}
+
+		/* I believe this is unnecessary now
+		//Call redrawTagpoints() whenever the canvas is animated (basically any redrawing of the canvas -> redraw the tagpoints as well)
+		viewer.addHandler('animation', function(event) {
+			redrawTagpoints();
+		});
+		*/
+
+
+		//Canvas-click event handler
+		viewer.addHandler('canvas-click', function(event) {
+			/*
+			If the canvas is clicked, calculate 3 points
+				1.) webPoint: Normal pixel coordinates of the webpage
+				2.) viewportPoint: OSD's coordinate system
+						i.) "By default, a single image will be placed with its left side at viewport x = 0 and its right side at viewport x = 1. The default top is at at viewport y = 0 and its bottom is wherever is appropriate for the image's aspect ratio. For instance, the bottom of a square image would be at y = 1, but the bottom of an image that's twice as wide as it is tall would be at y = 0.5."
+				3.) imagePoint: The pixel coordinates of the image  
+				*/
+				var webPoint = event.position;
+				var viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+				var imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
+			/*
+				If addTagPointOnClick is true, meaning the "addTagpoint" button has been clicked immediately prior to the click on canvas, then
+				add a new tagpoint to the canvas by pushing a new tagpoint object to the tagpointObjects queue (with fields storing the imagePoint of the click and "deleted" = 0). 
+
+				Also add overlays to canvas. 
+				*/
+				if (addTagPointOnClick==true) {
+					var img = document.createElement("img");
+					var tagpointNumberText = document.createElement("p1");
+					img.src = "../static/georef/js/openseadragon/images/marker.png";
+					tagpointNumberText.innerHTML=(tagpointObjects.length);
+					viewer.addOverlay({
+						element: img,
+						location: viewportPoint,
+						rotationMode: OpenSeadragon.OverlayRotationMode.NO_ROTATION,
+						placement: 'BOTTOM'
+					});
+					viewer.addOverlay({
+						element: tagpointNumberText, 
+						location: viewportPoint,
+						rotationMode: OpenSeadragon.OverlayRotationMode.NO_ROTATION,
+						placement: 'TOP'		
+					});
+					tagpointObjects.push({
+						imgPoint: imagePoint,					
+					deleted: 0, //initialize as false
+				});
+
+				//Clear the tagpoint list and redraw 
+				$("#tagpointList").html("");			
+				redrawText();
+
+				//reset cursor style
+				document.getElementById("leftWrap").style.cursor="auto";
+			}else{
+				//do nothing
+			}
+		});
+	</script>
+</div>
+</div>
+</body>
+</html>
