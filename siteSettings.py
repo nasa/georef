@@ -30,7 +30,8 @@ from django.core.urlresolvers import reverse
 # apps should be listed from "most specific" to "most general".  that
 # way, templates in more specific apps override ones from more general
 # apps.
-INSTALLED_APPS = ['georefApp',
+INSTALLED_APPS = ['deepzoom',
+                  'georefApp',
                   'geocamTiePoint',
                   'geocamUtil',
                   'georef_imageregistration',
@@ -139,6 +140,10 @@ MEDIA_ROOT = DATA_ROOT
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = DATA_URL
+
+# directory that holds the deepzoom tiles. 
+DEEPZOOM_ROOT = DATA_ROOT + 'deepzoom/'
+DEFAULT_CREATE_DEEPZOOM_OPTION = True
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
