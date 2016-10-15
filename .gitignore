@@ -1,3 +1,4 @@
+.settings
 *.pyc
 media/ugc
 docs/_build/
