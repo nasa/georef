@@ -143,6 +143,7 @@ MEDIA_URL = DATA_URL
 
 # directory that holds the deepzoom tiles. 
 DEEPZOOM_ROOT = DATA_ROOT + 'deepzoom/'
+DEEPZOOM_URL = DATA_URL + 'deepzoom/'
 DEFAULT_CREATE_DEEPZOOM_OPTION = True
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
@@ -247,3 +248,31 @@ CACHES = {
         'TIMEOUT': 604800,
     }
 }
+
+
+
+#===django-deepzoom settings====================================================
+#  This logging profile should be added to your project settings to catch any 
+#  file handling exceptions.
+import os
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(DEEPZOOM_ROOT, 'deepzoom.exception.log'),
+        },
+    },
+    'loggers': {
+        'deepzoom.models': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
+
+#EOF django-deepzoom test project settings
