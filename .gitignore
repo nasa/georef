@@ -18,10 +18,6 @@ media/css/*.r*.css
 manage_pydev.py
 imageregistration
 Ashe-GeocamSpace
-apps/georef_imageregistration
-apps/georef_imageregistration/*
-submodules/georef_imageregistration
-submodules/georef_imageregistration/*
 database_backups/
 db.sqlt
 osd_sandbox_william_lee*
