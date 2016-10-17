@@ -1,6 +1,3 @@
-[submodule "submodules/geocamAppEngineLibs"]
-	path = submodules/geocamAppEngineLibs
-	url = https://babelfish.arc.nasa.gov/git/georef_geocamappenginelibs
 [submodule "submodules/geocamTiePoint"]
 	path = submodules/geocamTiePoint
 	url = https://babelfish.arc.nasa.gov/git/georef_geocamtiepoint
