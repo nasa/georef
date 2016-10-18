@@ -26,17 +26,18 @@ import importlib
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.conf.global_settings import ALLOWED_HOSTS
 
 # apps should be listed from "most specific" to "most general".  that
 # way, templates in more specific apps override ones from more general
 # apps.
-INSTALLED_APPS = ['deepzoom',
-                  'georefApp',
+INSTALLED_APPS = ['georefApp',
                   'geocamTiePoint',
                   'geocamUtil',
                   'georef_imageregistration',
                   'geocamPycroraptor2',
 
+                  'deepzoom',
                   'django.contrib.admin',
                   'django.contrib.auth',
                   'django.contrib.contenttypes',
@@ -56,6 +57,7 @@ for app in INSTALLED_APPS:
         pass
 
 USING_DJANGO_DEV_SERVER = ('runserver' in sys.argv)
+USING_APP_ENGINE = False
 USE_STATIC_SERVE = USING_DJANGO_DEV_SERVER
 
 SCRIPT_NAME = os.environ['DJANGO_SCRIPT_NAME']  # set in sourceme.sh
@@ -65,6 +67,11 @@ if USING_DJANGO_DEV_SERVER:
 
 
 DEBUG = True
+# TO TEST DEBUG FALSE YOUR IP FOR VM MUST BE LISTED BELOW
+# TODO include real url hostname for staging and production; override production's in settings.py
+#ALLOWED_HOSTS = ['10.0.3.22', 
+#                 '10.0.3.18']
+
 # TEMPLATE_DEBUG = DEBUG
 
     
@@ -248,7 +255,6 @@ CACHES = {
         'TIMEOUT': 604800,
     }
 }
-
 
 
 #===django-deepzoom settings====================================================
