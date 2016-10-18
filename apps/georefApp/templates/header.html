@@ -3,6 +3,7 @@
   <div class="navbar-inner">
     <ul id="navlist" class="nav">
       <li><a href="/"><img src="{{ STATIC_URL }}georef/icons/GeoRefNoBox.png"/></a></li>
+      <li class="nav_pad_vertical navbar-text"><a href="{% url 'georef_home' %}">Overview</a></li>
       <li class="nav_pad_vertical navbar-text"><a href="{% url 'geocamTiePoint_backbone' %}#overlays/">List Overlays</a></li>
     </ul>
     <p class="pull-right navbar-text" style="float:right">

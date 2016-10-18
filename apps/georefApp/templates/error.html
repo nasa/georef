@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block contents %}
+<h1>Error.</h1>
+	{% if messages %}
+	 <div  id="messages" class="error">
+	    <ul class="messages" id="errorMessage" style="color:red;">
+	    {% for message in messages %}
+	        <li>{% if message.tags %} {{ message.tags }}: {% endif %}  {{ message }}</li>
+	    {% endfor %}
+	    </ul>
+	</div>
+	{% endif %}
+{% endblock %}
