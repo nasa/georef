@@ -6,10 +6,17 @@ django.setup()
 from geocamTiePoint.models import *
 
 
+import time
+
+
 def generateDeepzoomFiles():
     overlays = Overlay.objects.all()
+    
+    start = time.time()
+    count = 0
     for overlay in overlays:
         if overlay.imageData is not None:
+            count = count + 1
             # set the contrast value to 1
             overlay.imageData.contrast = 1
             overlay.imageData.brightness = 0
@@ -21,5 +28,10 @@ def generateDeepzoomFiles():
                     dz = overlay.imageData.create_deepzoom_image()
             except: 
                 print "could not create deepzoom file for overlay %s" % overlay.name
+    end = time.time()
+    print("Total time for deepzoom creation.")
+    print(end - start)
+    print "total number of overlays"
+    print count
             
 generateDeepzoomFiles()
