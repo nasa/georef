@@ -15,6 +15,8 @@ def generateDeepzoomFiles():
     start = time.time()
     count = 0
     for overlay in overlays:
+        overlay.imageData = overlay.getRawImageData()
+        overlay.save()
         
         if overlay.imageData is not None:
             count = count + 1
