@@ -16,5 +16,5 @@ from georefApp import views
 
 urlpatterns = [url(r'^$', views.home, {}, 'georef_home'), 
                url(r'^georefV2demo/$', views.osdDemoPage, {}, 'georef_osd_demo'),
-               url(r'^error', TemplateView.as_view(template_name='error.html'), {}, 'error'),
+               url(r'^error', TemplateView.as_view(template_name='error.html'), {}, 'georef_error'),
                ] 
