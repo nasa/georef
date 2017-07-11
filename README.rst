@@ -8,8 +8,8 @@ Our reference platform for GeoRef is Ubuntu Linux 14.04 LTS,
 running Python 2.7.6 and Django 1.9.2.  For development we use Django's
 built-in development web server with a SQLite 3.6 database.  
 
-We develop using a VagrantBox VM running a Ubuntu Linux inside a Mac OSX host machine.
-Vagrant VM is strictly optional.
+We develop using a VagrantBox VM running a Ubuntu Linux inside a Mac OS X host machine.
+Vagrant VM is strictly optional and only necessary if you are not running directly from a Ubuntu Linux Machine.
 
 
 (Optional) Set up a Vagrant VM
@@ -41,7 +41,7 @@ Check out our latest source revision with::
 For more information on the Git version control system, visit `the Git home page`_.
 You can install Git on Ubuntu with::
 
-  sudo apt-get install git
+  sudo apt-get install git-all
 
 .. _the Git home page: http://git-scm.com/
 
@@ -54,13 +54,13 @@ Run the Setup Script
 	# if you are running inside a Vagrant VM do
 	setup_site_vagrant.sh
 	
+	OR 
+	
 	# if you are running directly on a Ubuntu Linux Machine, do
 	sudo python $GEOCAM_DIR/georef_deploy/setup_site.py
-	# 
-	sudo ln -s /home/geocam/georef_deploy georef_deploy
-	sudo dpkg-reconfigure mariadb-server-10.0
-	sudo ln -s gds/georef/ georef
-
+		# You need to manually create couple symlinks if not running on vagrant.
+		sudo ln -s /home/geocam/georef_deploy georef_deploy
+		sudo ln -s gds/georef/ georef
 
 The script should initialize the vagrant box and it clones all the submodules that are needed.
 
@@ -83,7 +83,7 @@ First install Ubuntu packages::
   sudo apt-get python-imaging
 
 
-Set Up MapFasten
+Set Up GeoRef
 ~~~~~~~~~~~~~~~~
 
 To install Python dependencies, render icons and collect media for the
@@ -135,3 +135,24 @@ DATABASES = {
 .. o  the Administrator of the National Aeronautics and Space Administration.
 .. o  All Rights Reserved.
 .. o  __END_LICENSE__
+
+
+GeoRef App Descriptions
+========================
+
+geocamTiePoint
+~~~~~~~~~~~~~~
+
+
+
+geocamPycroraptor2
+~~~~~~~~~~~~~~~~~~~
+
+geocamUtil
+~~~~~~~~~~  
+
+georefApp
+~~~~~~~~~~
+
+georef_imageregistration
+~~~~~~~~~~~~~~~~~~~~~~~~~
