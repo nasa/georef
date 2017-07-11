@@ -1,4 +1,3 @@
-
 This Django site uses git submodules to pull in closely related packages
 from external git repositories. 
 
@@ -22,10 +21,9 @@ symlinked into the ``apps`` directory.)
 
 Example of Adding a New Submodule
 =================================
-
 ::
 
-  cd geocamMapFasten
+  cd georef
   # note: using public (read-only) submodule URL to allow devs without
   # write access to fetch submodule
   git submodule add git://github.com/geocam/geocamUtilWeb.git submodules/geocamUtilWeb
