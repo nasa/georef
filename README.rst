@@ -11,6 +11,7 @@ built-in development web server with a SQLite 3.6 database.
 We develop using a VagrantBox VM running a Ubuntu Linux inside a Mac OS X host machine.
 Vagrant VM is strictly optional and only necessary if you are not running directly from a Ubuntu Linux Machine.
 
+Our image view is rendered using the OpenSeadragon open source image viewer. (openseadragon.github.io/)
 
 (Optional) Set up a Vagrant VM
 ~~~~~~~~~~~~~~~~~~~~
@@ -135,24 +136,3 @@ DATABASES = {
 .. o  the Administrator of the National Aeronautics and Space Administration.
 .. o  All Rights Reserved.
 .. o  __END_LICENSE__
-
-
-GeoRef App Descriptions
-========================
-
-geocamTiePoint
-~~~~~~~~~~~~~~
-
-
-
-geocamPycroraptor2
-~~~~~~~~~~~~~~~~~~~
-
-geocamUtil
-~~~~~~~~~~  
-
-georefApp
-~~~~~~~~~~
-
-georef_imageregistration
-~~~~~~~~~~~~~~~~~~~~~~~~~
