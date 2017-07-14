@@ -105,6 +105,15 @@ DATABASES = {
     }
 }
 
+# for auto image registration. set these in settings.py
+GEOREF_DB_HOST="localhost"
+GEOREF_DB_USER="root"
+GEOREF_DB_PASS="vagrant"
+GEOREF_DB_NAME="georef"
+
+# Path to the input database
+DB_PATH = '/home/smcmich1/db.sqlt'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
