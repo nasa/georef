@@ -40,7 +40,8 @@ Get the Source
 Check out our latest source revision with::
 
   cd $GEOCAM_DIR
-  git clone https://babelfish.arc.nasa.gov/git/georef_deploy/
+  git clone https://github.com/nasa/georef_deploy.git
+
 
 For more information on the Git version control system, visit `the Git home page`_.
 You can install Git on Ubuntu with::
