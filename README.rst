@@ -15,6 +15,9 @@ Our image view is rendered using the OpenSeadragon open source image viewer. (op
 
 (Optional) Set up a Vagrant VM
 ~~~~~~~~~~~~~~~~~~~~
+If you are running on a mac, we highly encourage you to use Vagrant to set up 
+a Ubuntu Development Instance. Our set up script works best within the Vagrant 
+environment running on Mac OSX.
 
 Install VirtualBox. Make sure the version is 4.3.10.
 Install the latest version of vagrant: ​http://www.vagrantup.com/downloads
@@ -49,21 +52,24 @@ You can install Git on Ubuntu with::
 
 Run the Setup Script
 ~~~~~~~~~~~~~~~~~~~~~
-	# go into the georef_deploy directory 
-	cd georef_deploy
-	
-	# if you are running inside a Vagrant VM do
-	setup_site_vagrant.sh
-	
-	OR 
-	
-	# if you are running directly on a Ubuntu Linux Machine, do
-	sudo python $GEOCAM_DIR/georef_deploy/setup_site.py
-		# You need to manually create couple symlinks if not running on vagrant.
-		sudo ln -s /home/geocam/georef_deploy georef_deploy
-		sudo ln -s gds/georef/ georef
+The "setup_site_vagrant.sh" script initializes the vagrant box and it clones 
+all the submodules that are needed::
 
-The script should initialize the vagrant box and it clones all the submodules that are needed.
+    # go into the georef_deploy directory
+    cd georef_deploy
+    
+    # if you are running inside a Vagrant VM do
+    setup_site_vagrant.sh
+
+
+If you are running directly on a Ubuntu Linux Machine, you can skip the above shell
+script and run the following::
+    sudo python $GEOCAM_DIR/georef_deploy/setup_site.py
+    
+    # You need to manually create couple symlinks if not running on vagrant
+    sudo ln -s /home/geocam/georef_deploy georef_deploy
+    sudo ln -s gds/georef/ georef
+
 
 
 Install Non-Python Packages
