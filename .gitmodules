@@ -1,12 +1,12 @@
 [submodule "submodules/geocamTiePoint"]
 	path = submodules/geocamTiePoint
-	url = https://babelfish.arc.nasa.gov/git/georef_geocamtiepoint
+	url = https://github.com/nasa/georef_geocamtiepoint.git
 [submodule "submodules/geocamUtilWeb"]
 	path = submodules/geocamUtilWeb
-	url = https://babelfish.arc.nasa.gov/git/georef_geocamutilweb
+	url = https://github.com/nasa/georef_geocamutilweb.git
 [submodule "submodules/georef_imageregistration"]
 	path = submodules/georef_imageregistration
-	url = https://babelfish.arc.nasa.gov/git/georef_imageregistration
+	url = https://github.com/nasa/georef_imageregistration.git
 [submodule "submodules/geocamPycroraptor2"]
 	path = submodules/geocamPycroraptor2
 	url = https://github.com/geocam/geocamPycroraptor2.git
