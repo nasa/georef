@@ -6,7 +6,7 @@ Requirements
 
 Our reference platform for GeoRef is Ubuntu Linux 14.04 LTS,
 running Python 2.7.6 and Django 1.9.2.  For development we use Django's
-built-in development web server with a SQLite 3.6 database.  
+built-in development web server MySQL database.  
 
 We develop using a VagrantBox VM running a Ubuntu Linux inside a Mac OS X host machine.
 Vagrant VM is strictly optional and only necessary if you are not running directly from a Ubuntu Linux Machine.
@@ -19,7 +19,8 @@ If you are running on a mac, we highly encourage you to use Vagrant to set up
 a Ubuntu Development Instance. Our set up script works best within the Vagrant 
 environment running on Mac OSX.
 
-Install VirtualBox. Make sure the version is 4.3.10.
+Install VirtualBox. We have found that VirtualBox Version 4.3.10 works best with Vagrant.
+We highly recommend you download VirtualBox 4.3.10.
 Install the latest version of vagrant: ​http://www.vagrantup.com/downloads
 
 
@@ -72,34 +73,69 @@ script and run the following::
     sudo ln -s gds/georef/ georef
 
 
+Override settings.py
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Install Non-Python Packages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In the ``settings.py`` file, modify the ``DATABASES`` field to point to
+your Django MySQL database::
 
-First install Ubuntu packages::
-
-  # tools for Python package compilation and management
-  sudo apt-get install python2.7-dev python-pip
-
-  # database support for development in native django environment
-  sudo apt-get install sqlite3 libsqlite3-dev
-
-  # handling images
-  sudo apt-get install libpng-dev libjpeg-dev libfreetype6-dev libtiff-dev imagemagick
-
-  # must install PIL through Ubuntu package system, PyPI version fails on Ubuntu
-  sudo apt-get python-imaging
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'georef',
+            'USER': 'root',
+            'PASSWORD': 'vagrant',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
+    }
 
 
-Set Up GeoRef
-~~~~~~~~~~~~~~~~
+Setup the Data Directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+You must manually create the data directory and its sub folders. GeoRef will 
+write the image tiles to this directory.
+
+1. Create a data directory
+    ``mkdir $GEOCAM_DIR/georef/data``
+2. Create the overlays directory
+    ``mkdir -p $GEOCAM_DIR/georef/data/geocamTiePoint/overlay_images``
+3. Set the permissions
+    ``chmod -R 777 $GEOCAM_DIR/georef/data``
+
+
+Setup GeoRef
+~~~~~~~~~~~~
+
+If your development environment is set up inside Vagrant, cd into the georef_deploy 
+directory and do::
+    vagrant ssh
+And then run the following commands.
+
+
+You must create the following directory and files::
+
+ # If you are not using Vagrant, do
+     mkdir -p $GEOCAM_DIR/georef_deploy/georef/data/deepzoom/ & touch $GEOCAM_DIR/georef_deploy/georef/data/deepzoom/deepzoom.exception.log
+
+ # If you are using Vagrant, do
+     # deepzoom directory needs to be owned by www-data. Put it in /home/vagrant so that it can be owned by www-data (and not by user)
+     mkdir -p /home/vagrant/deepzoom 
+     # create a symlink to deepzoom in the data dir
+     ln -s /home/vagrant/deepzoom /home/vagrant/georef/data/deepzoom
+
+
+Install Earth Engine by following the instructions below: 
+    https://developers.google.com/earth-engine/python_install_manual
+
 
 To install Python dependencies, render icons and collect media for the
 server, run::
 
-  cd $GEOCAM_DIR/georef
+  cd $GEOCAM_DIR/georef_deploy/georef
   ./manage.py bootstrap --yes
-  source $GEOCAM_DIR/georef/sourceme.sh genSourceme genSettings
+  source $GEOCAM_DIR/georef_deploy/georef/sourceme.sh genSourceme genSettings
+  ./manage.py collectstatic  
   ./manage.py prep
 
 You'll need to source the ``sourceme.sh`` file every time you open a new
@@ -108,35 +144,35 @@ the Django development web server.  The ``sourceme.sh`` file will also
 take care of activating your virtualenv environment in new shells (if
 you were in a virtualenv when you ran ``setup.py``).
 
-To initialize the database::
 
-	$GEOCAM_DIR/georef/manage.py makemigrations geocamTiePoint
-	$GEOCAM_DIR/georef/manage.py makemigrations georefApp
-	$GEOCAM_DIR/georef/manage.py migrate
+To initialize the database
+    ``$GEOCAM_DIR/georef/manage.py makemigrations deepzoom``
+
+    ``$GEOCAM_DIR/georef/manage.py makemigrations geocamTiePoint``
+
+    ``$GEOCAM_DIR/georef/manage.py migrate``
+
+Note that the path to manage.py may be different if you are running inside Vagrant.
+
+
+Create a User Account  
+~~~~~~~~~~~~~~~~~~~~~
+User name and password are required to use GeoRef. To create one, do::
+    
+    ./manage.py createsuperuser
+
+And follow the prompts.
+
 
 
 Try It Out
 ~~~~~~~~~~
+Now you're ready to try it out!  
 
-Now you're ready to try it out!  Point your browser to ​http://10.0.3.18/
+Restart the Apache server ``sudo apachectl restart``
 
+Point your browser to ​http://10.0.3.18/
 
-Override settings.py
-~~~~~~~~~~~~~~~~~~~~~~~
-
-In the ``settings.py`` file, modify the ``DATABASES`` field to point to
-your Django MySQL database::
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'georef',
-        'USER': 'root',
-        'PASSWORD': 'vagrant',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
 
 .. o  __BEGIN_LICENSE__
 .. o  Copyright (C) 2008-2010 United States Government as represented by
