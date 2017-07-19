@@ -14,6 +14,6 @@
         }
     },
     "GROUPS": {
-        "startup": ["generateManualRegistrationOutput", "autoregister", "generateAutoRegistrationOutput"]
+        "startup": ["autoregister", "generateAutoRegistrationOutput"]
     }
 }
