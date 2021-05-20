@@ -112,7 +112,7 @@ GEOREF_DB_PASS="vagrant"
 GEOREF_DB_NAME="georef"
 
 # Path to the input database
-DB_PATH = '/home/smcmich1/db.sqlt'
+DB_PATH = '/home/user/db.sqlt'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -203,7 +203,7 @@ TEMPLATES = [
 ]
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '***REMOVED***'
+SECRET_KEY = 'INSERT_UNIQUE_KEY_HERE'
 
 # Session Serializer: we use Pickle for backward compatibility and to allow more flexible session storage, but
 # be sure to keep the SECRET_KEY secret for security (see:
