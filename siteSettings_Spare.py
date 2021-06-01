@@ -112,7 +112,7 @@ GEOREF_DB_PASS="vagrant"
 GEOREF_DB_NAME="georef"
 
 # Path to the input database
-DB_PATH = '/home/smcmich1/db.sqlt'
+DB_PATH = '/home/username/db.sqlt'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
