@@ -1,5 +1,6 @@
 Installation
 ============
+GeoRef is a Web-based software application designed to increase the efficiency and precision in geo-locating photographs taken by astronauts from the International Space Station. GeoRef provides highly automated processes for: (1) calculating the latitude and longitude coordinates of the center point of the image, and (2) producing geo-referenced map overlays for the image. The georeferenced images produced by GeoRef are designed to support the needs of educational, Earth science, and disaster response users.
 
 Requirements
 ~~~~~~~~~~~~
